@@ -180,8 +180,8 @@ const BankExchange: React.FC<BankExchangeProps> = ({ context }) => {
                         <StepHeader title="Confirm Transfer" onBack={handleBack} />
                         <div className="p-6 space-y-4">
                             <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2">
-                                <div className="flex justify-between"><span className="text-slate-600">You Send</span><span className="font-mono font-semibold text-red-600">- {parseFloat(fromAmount).toFixed(2)} {fromCurrency}</span></div>
-                                <div className="flex justify-between"><span className="text-slate-600">They Receive</span><span className="font-mono font-semibold text-green-600">+ {toAmount} {toCurrency}</span></div>
+                                <div className="flex justify-between"><span className="text-slate-600">You Send</span><span className="font-mono font-semibold text-red-600">- {parseFloat(fromAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {fromCurrency}</span></div>
+                                <div className="flex justify-between"><span className="text-slate-600">They Receive</span><span className="font-mono font-semibold text-green-600">+ {parseFloat(toAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {toCurrency}</span></div>
                             </div>
                              <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
                                 <h4 className="font-semibold mb-2">Recipient:</h4>

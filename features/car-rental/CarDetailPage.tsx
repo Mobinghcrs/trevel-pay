@@ -63,11 +63,11 @@ const CarDetailPage: React.FC<CarDetailPageProps> = ({ car, pickupDate, dropoffD
                             <DetailItem label="Drop-off Date" value={formatDate(dropoffDate)} />
                         </div>
                          <div className="space-y-2 pt-4 border-t border-slate-200">
-                            <DetailItem label="Price per day" value={`$${car.pricePerDay.toFixed(2)}`} />
+                            <DetailItem label="Price per day" value={`$${car.pricePerDay.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} />
                             <DetailItem label="Rental Days" value={rentalDays} />
                             <div className="flex justify-between items-center pt-2 mt-2 border-t border-slate-300">
                                 <span className="text-lg font-bold text-slate-800">Total Price</span>
-                                <span className="text-2xl font-bold text-sky-600">${totalPrice.toFixed(2)}</span>
+                                <span className="text-2xl font-bold text-sky-600">${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 pt-4">

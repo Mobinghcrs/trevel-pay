@@ -3,7 +3,7 @@ import { ICONS } from '../../constants';
 import { authenticate } from '../../services/apiService';
 
 interface LoginPageProps {
-  onLogin: (user: { name: string, email: string, role: 'user' | 'agent' | 'guest' | 'merchant' | 'admin' }) => void;
+  onLogin: (user: { name: string, email: string, role: 'user' | 'agent' | 'guest' | 'merchant' | 'admin', userId?: string }) => void;
 }
 
 type LoginRole = 'traveler' | 'agent' | 'merchant';
@@ -32,7 +32,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   };
 
   const handleGuestLogin = () => {
-    onLogin({ name: 'Guest', email: '', role: 'guest' });
+    onLogin({ name: 'Guest', email: '', role: 'guest', userId: '@guest' });
   };
 
   const placeholderEmail = activeRole === 'traveler' 

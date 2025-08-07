@@ -61,7 +61,7 @@ const UserTableRow: React.FC<UserTableRowProps> = ({ user, onViewDetails }) => {
                 <AccountTypeBadge type={user.accountType} />
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{formatDate(user.memberSince)}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-900">${totalBalanceUSD.toFixed(2)}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-900">${totalBalanceUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <button
                     onClick={() => onViewDetails(user)}

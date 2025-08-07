@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ICONS } from '../constants';
-import { authenticate } from '../services/apiService';
+import { setCurrentUser } from '../services/currentUser';
 
 const AdminLoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ const AdminLoginPage: React.FC = () => {
         // This will trigger the global 'authchange' event
         // that the Router listens to, causing a re-render and route change.
         const mockAdmin = { name: 'Admin', email: 'admin@example.com', role: 'admin' as const };
-        localStorage.setItem('travel_pay_user_session', JSON.stringify(mockAdmin));
+        setCurrentUser(mockAdmin);
         window.dispatchEvent(new Event('authchange'));
         window.location.hash = '#/admin/dashboard';
     } else {

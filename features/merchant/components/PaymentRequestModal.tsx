@@ -46,7 +46,7 @@ const PaymentRequestModal: React.FC<PaymentRequestModalProps> = ({ request, onCo
                         <img src={request.merchantLogoUrl} alt={request.merchantName} className="w-10 h-10 rounded-full bg-slate-200" />
                         <p className="text-xl font-bold text-slate-800">{request.merchantName}</p>
                     </div>
-                    <p className="text-4xl font-bold text-slate-900">${request.amount.toFixed(2)}</p>
+                    <p className="text-4xl font-bold text-slate-900">${request.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-sm text-slate-500">{request.currency}</p>
                 </div>
                 <div className="flex justify-between gap-4 pt-4">

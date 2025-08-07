@@ -35,7 +35,7 @@ const HotelCard: React.FC<{ hotel: Hotel, onSelectRoom: (hotel: Hotel, room: Roo
             </div>
             <div className="text-right flex-shrink-0 ml-4">
                 <p className="text-slate-500 text-sm">from</p>
-                <p className="text-2xl font-bold text-sky-600">${hotel.pricePerNight.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-sky-600">${hotel.pricePerNight.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 <p className="text-slate-500 text-sm">/night</p>
             </div>
         </div>
@@ -55,7 +55,7 @@ const HotelCard: React.FC<{ hotel: Hotel, onSelectRoom: (hotel: Hotel, room: Roo
                             <p className="text-xs text-slate-500">Capacity: {room.capacity} | Beds: {room.beds}</p>
                         </div>
                         <div className="text-right">
-                            <p className="font-bold text-lg text-slate-800">${room.price.toFixed(2)}</p>
+                            <p className="font-bold text-lg text-slate-800">${room.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                              <button onClick={() => onSelectRoom(hotel, room)} className="bg-sky-600 text-white px-3 py-1 text-sm rounded-md hover:bg-sky-500 transition-colors font-semibold">
                                 Book
                             </button>

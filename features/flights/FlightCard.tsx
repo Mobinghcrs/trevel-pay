@@ -85,7 +85,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, onSelectFlight }) => {
                     </div>
                 </div>
                 <div className="text-right">
-                    <p className="text-2xl font-bold text-teal-600">${flight.price.toFixed(2)}</p>
+                    <p className="text-2xl font-bold text-teal-600">${flight.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <p className="text-xs text-slate-500">Total Price</p>
                 </div>
             </div>

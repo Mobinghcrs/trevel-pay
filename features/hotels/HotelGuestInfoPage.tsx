@@ -83,7 +83,7 @@ const HotelGuestInfoPage: React.FC<HotelGuestInfoPageProps> = ({ hotel, room, on
                     </div>
                     <div className="flex justify-between">
                         <span className="text-slate-600">Price per night</span>
-                        <span className="text-slate-900 font-semibold">${room.price.toFixed(2)}</span>
+                        <span className="text-slate-900 font-semibold">${room.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
                  </div>
             </Card>

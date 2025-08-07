@@ -151,7 +151,7 @@ const PassengerInfoPage: React.FC<{
                     </div>
                     <div className="flex justify-between border-t border-slate-200 pt-3">
                         <span className="text-slate-600">Price per ticket</span>
-                        <span className="text-slate-900 font-semibold">${flight.price.toFixed(2)}</span>
+                        <span className="text-slate-900 font-semibold">${flight.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
                  </div>
             </Card>

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { FinancialSummary } from '../../types';
 import { getFinancialSummary } from '../../services/apiService';
@@ -41,25 +42,25 @@ const FinancialDashboard: React.FC = () => {
                     title="Total Revenue"
                     value={`$${summary.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
                     icon={ICONS.currencyDollar}
-                    color="text-green-500"
+                    color="green"
                 />
                 <StatCard
                     title="Net Profit"
                     value={`$${summary.netProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
                     icon={ICONS.trendingUp}
-                    color="text-teal-500"
+                    color="blue"
                 />
                 <StatCard
                     title="User Liabilities (Float)"
                     value={`$${summary.userLiabilities.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
                     icon={ICONS.users}
-                    color="text-red-500"
+                    color="yellow"
                 />
                 <StatCard
                     title="House Liquidity"
                     value={`$${summary.houseLiquidity.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
                     icon={ICONS.bank}
-                    color="text-violet-500"
+                    color="violet"
                 />
             </div>
             <div className="mt-8 bg-white border border-slate-200 rounded-lg p-6">

@@ -78,7 +78,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, amount, on
             return (
                 <div className="space-y-4">
                     <p className="text-center text-slate-600">You are about to pay:</p>
-                    <p className="text-center text-4xl font-bold text-slate-900">${amount.toFixed(2)}</p>
+                    <p className="text-center text-4xl font-bold text-slate-900">${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     <div className="pt-4">
                         <button onClick={handlePayment} className="w-full bg-teal-600 text-white px-4 py-3 rounded-md font-semibold hover:bg-teal-500 transition-all duration-200">
                             Pay Now

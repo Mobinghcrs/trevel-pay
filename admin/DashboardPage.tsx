@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect } from 'react';
 import { ICONS } from '../constants';
 import StatCard from './components/StatCard';
@@ -8,16 +7,17 @@ import BarChart from './components/charts/BarChart';
 import { getAdminCashRequests, getAdminRevenueData, getAdminP2PVolume, getAdminTopCurrencies } from '../services/apiService';
 import { RevenueDataPoint, P2PVolume, TopCurrency } from '../types';
 import Spinner from '../components/Spinner';
+import Card from '../components/Card';
 
-const AnalyticsCard: React.FC<{title: string, icon: React.ReactNode, children: React.ReactNode}> = ({title, icon, children}) => (
-     <div className="bg-white border border-slate-200 rounded-xl shadow-lg p-5">
-        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-            <span className="text-teal-600">{icon}</span>
-            {title}
-        </h3>
-        {children}
+const PageTitle: React.FC = () => (
+    <div className="flex justify-between items-center mb-6">
+        <div>
+            <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+            <p className="text-sm text-slate-500">Welcome to the TRAVEL PAY admin dashboard.</p>
+        </div>
     </div>
 );
+
 
 const DashboardPage: React.FC = () => {
     const [pendingRequests, setPendingRequests] = useState(0);
@@ -57,49 +57,60 @@ const DashboardPage: React.FC = () => {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-6">Admin Dashboard</h1>
+            <PageTitle />
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatCard 
-                    title="Pending Forex Requests"
+                    title="Pending Forex"
                     value={pendingRequests.toString()}
                     icon={ICONS.exchange}
-                    color="text-yellow-500"
+                    color="yellow"
                 />
                 <StatCard 
-                    title="Total Flights Booked"
+                    title="Flights Booked"
                     value="1,287"
                     icon={ICONS.plane}
-                    color="text-blue-500"
+                    color="blue"
                 />
                 <StatCard 
                     title="Active Users"
                     value="452"
                     icon={ICONS.users}
-                    color="text-green-500"
+                    color="green"
                 />
                  <StatCard 
-                    title="System Status"
-                    value="Operational"
-                    icon={<div className="h-4 w-4 rounded-full bg-green-500 animate-pulse"></div>}
-                    color="text-green-500"
+                    title="Total Revenue"
+                    value="$125,430"
+                    icon={ICONS.currencyDollar}
+                    color="violet"
                 />
             </div>
 
             <div className="mb-8">
-                <h2 className="text-2xl font-bold text-slate-900 mb-4">Business Intelligence & Analytics</h2>
                 {isLoading ? (
                     <Spinner message="Loading analytics..." />
                 ) : (
-                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                        <AnalyticsCard title="Revenue Over Time (USD)" icon={ICONS.trendingUp}>
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                        <Card className="p-5 xl:col-span-2">
+                             <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                                <span className="text-teal-600">{ICONS.trendingUp}</span>
+                                Revenue Over Time (USD)
+                            </h3>
                              <LineChart data={revenueData} />
-                        </AnalyticsCard>
+                        </Card>
                         <div className="space-y-6">
-                            <AnalyticsCard title="P2P Trade Volume" icon={ICONS.chartBar}>
+                            <Card className="p-5">
+                                 <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                                    <span className="text-teal-600">{ICONS.chartBar}</span>
+                                    P2P Trade Volume
+                                </h3>
                                {p2pVolume && <BarChart data={p2pVolume} />}
-                            </AnalyticsCard>
-                            <AnalyticsCard title="Top Traded Currencies (by Volume)" icon={ICONS.currencyDollar}>
+                            </Card>
+                            <Card className="p-5">
+                                 <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                                    <span className="text-teal-600">{ICONS.currencyDollar}</span>
+                                    Top Traded Currencies
+                                </h3>
                                 <ul className="space-y-3">
                                     {topCurrencies.map(c => (
                                         <li key={c.symbol} className="flex justify-between items-center text-sm">
@@ -108,7 +119,7 @@ const DashboardPage: React.FC = () => {
                                         </li>
                                     ))}
                                 </ul>
-                            </AnalyticsCard>
+                            </Card>
                         </div>
                     </div>
                 )}

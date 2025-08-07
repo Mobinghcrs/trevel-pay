@@ -110,7 +110,7 @@ const MerchantDashboard: React.FC = () => {
         const completed = recentTransactions.filter(t => t.status === 'Completed');
         const salesToday = completed.reduce((sum, tx) => sum + tx.amount, 0);
         return {
-            sales: `$${salesToday.toFixed(2)}`,
+            sales: `$${salesToday.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
             transactions: completed.length,
         };
     }, [recentTransactions]);
@@ -205,7 +205,7 @@ const MerchantDashboard: React.FC = () => {
                                         <p className="text-xs text-slate-500">{new Date(tx.timestamp).toLocaleTimeString()}</p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="font-mono font-bold text-slate-900">{tx.amount.toFixed(2)} {tx.currency}</p>
+                                        <p className="font-mono font-bold text-slate-900">{tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {tx.currency}</p>
                                         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${tx.status === 'Pending' ? 'bg-amber-100 text-amber-800' : 'bg-green-100 text-green-800'}`}>{tx.status}</span>
                                     </div>
                                 </div>

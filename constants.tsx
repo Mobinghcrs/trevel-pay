@@ -238,6 +238,11 @@ export const ICONS = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
     </svg>
   ),
+  flag: (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6H8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+    </svg>
+  ),
   // BI Dashboard Icons
   chartBar: (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -311,6 +316,24 @@ export const ICONS = {
   aiChat: (
      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.572L16.5 21.75l-.398-1.178a3.375 3.375 0 00-2.456-2.456L12.5 17.25l1.178-.398a3.375 3.375 0 002.456-2.456L16.5 13.5l.398 1.178a3.375 3.375 0 002.456 2.456l1.178.398-1.178.398a3.375 3.375 0 00-2.456 2.456z" />
+    </svg>
+  ),
+  qrCode: (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.5a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V7.5a3 3 0 00-3-3H3.75z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 16.5v-6a1.5 1.5 0 00-3 0v6a1.5 1.5 0 003 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 16.5v-6a1.5 1.5 0 00-3 0v6a1.5 1.5 0 003 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h9" />
+    </svg>
+  ),
+  userArrows: (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/>
+    </svg>
+  ),
+  share: (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.195.025.39.05.588.08m-1.182 2.026a2.25 2.25 0 11-2.186 0M12 18.75a2.25 2.25 0 012.25-2.25m-2.25 2.25a2.25 2.25 0 00-2.25-2.25m2.25 2.25v-2.25m0 0a2.25 2.25 0 012.25-2.25m-2.25 2.25a2.25 2.25 0 00-2.25-2.25m0 9.75a2.25 2.25 0 012.25-2.25M9.75 21a2.25 2.25 0 002.25-2.25m0 0a2.25 2.25 0 00-2.25-2.25m0 0a2.25 2.25 0 01-2.25-2.25m0 0a2.25 2.25 0 00-2.25-2.25M12 5.25a2.25 2.25 0 012.25-2.25m-2.25 2.25a2.25 2.25 0 00-2.25-2.25m2.25 2.25v-2.25m0 0a2.25 2.25 0 012.25-2.25m-2.25 2.25a2.25 2.25 0 00-2.25-2.25" />
     </svg>
   ),
 };

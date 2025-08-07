@@ -19,7 +19,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect }) => {
             <h3 className="text-lg font-bold text-slate-800 truncate">{product.name}</h3>
         </div>
         <div className="mt-auto flex justify-between items-end pt-2">
-          <p className="text-xl font-bold text-slate-900">${product.price.toFixed(2)}</p>
+          <p className="text-xl font-bold text-slate-900">${product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           <button className="text-sm font-semibold text-sky-700 bg-sky-100 hover:bg-sky-200 px-3 py-1.5 rounded-md transition-colors">
             View
           </button>

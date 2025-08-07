@@ -22,7 +22,7 @@ const ProductOrderCard: React.FC<{ order: ProductOrder }> = ({ order }) => {
 
                         <div>
                             <p className="text-sm text-slate-500">Amount Paid</p>
-                            <p className="font-mono font-semibold text-slate-800">${order.totalPrice.toFixed(2)}</p>
+                            <p className="font-mono font-semibold text-slate-800">${order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                         </div>
                         
                         <div>
@@ -61,7 +61,7 @@ const ProductOrderCard: React.FC<{ order: ProductOrder }> = ({ order }) => {
                     </div>
                     <div className="bg-slate-100 p-4 rounded-lg space-y-3">
                         <h3 className="font-bold">Payment</h3>
-                        <div className="flex justify-between"><span className="text-slate-600">Total Paid:</span> <span className="font-mono font-semibold">${order.totalPrice.toFixed(2)}</span></div>
+                        <div className="flex justify-between"><span className="text-slate-600">Total Paid:</span> <span className="font-mono font-semibold">${order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>
                         <div className="flex justify-between"><span className="text-slate-600">Date:</span> <span>{new Date(order.timestamp).toLocaleString()}</span></div>
                     </div>
                     <button onClick={() => setIsModalOpen(false)} className="w-full mt-4 bg-slate-200 text-slate-800 px-4 py-2 rounded-md font-semibold hover:bg-slate-300 transition-colors">

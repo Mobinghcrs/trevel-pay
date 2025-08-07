@@ -93,7 +93,7 @@ const MarketRates: React.FC = () => {
                  {p.history && <Sparkline data={p.history} color={'#6b7280'} />}
               </div>
               <div className="text-right col-span-1">
-                <p className="font-mono text-gray-800">{p.rate.toFixed(4)}</p>
+                <p className="font-mono text-gray-800">{p.rate.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 })}</p>
               </div>
             </div>
           ))}

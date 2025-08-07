@@ -1,8 +1,8 @@
 
-
 import React from 'react';
 import { AdminPage } from '../types';
 import { ICONS } from '../constants';
+import { clearCurrentUser } from '../services/currentUser';
 
 interface SidebarProps {
     activePage: AdminPage;
@@ -19,18 +19,17 @@ const NavItem: React.FC<{
 }> = ({ icon, label, isActive, onClick }) => {
     const baseClasses = "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors duration-150";
     const activeClasses = "bg-teal-600 text-white shadow-sm";
-    const inactiveClasses = "text-slate-300 hover:bg-slate-700 hover:text-white";
+    const inactiveClasses = "text-slate-400 hover:bg-slate-700/50 hover:text-white";
 
     return (
         <li>
             <a href="#" onClick={e => { e.preventDefault(); onClick(); }} className={`${baseClasses} ${isActive ? activeClasses : inactiveClasses}`}>
-                {icon}
+                <span className="h-5 w-5 flex-shrink-0">{icon}</span>
                 <span className="flex-1">{label}</span>
             </a>
         </li>
     );
 };
-
 
 const Sidebar: React.FC<SidebarProps> = ({ activePage, setPage, isOpen, setIsOpen }) => {
     
@@ -41,10 +40,16 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, setPage, isOpen, setIsOpe
         }
     };
 
+    const handleLogout = () => {
+      clearCurrentUser();
+      window.location.hash = '#/';
+      window.dispatchEvent(new Event('authchange'));
+    }
+
     return (
         <>
-            <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-800 flex-shrink-0 flex flex-col transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0`}>
-                <div className="h-16 flex items-center px-6 border-b border-slate-700">
+            <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 flex-shrink-0 flex flex-col transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0`}>
+                <div className="h-16 flex items-center px-6 border-b border-slate-700/50">
                     <a href="#" className="flex items-center gap-3">
                         <span className="text-teal-400">{ICONS.logo}</span>
                         <h1 className="text-xl font-bold text-white">Admin Panel</h1>
@@ -114,8 +119,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, setPage, isOpen, setIsOpe
                         />
                     </ul>
                 </nav>
-                <div className="px-4 py-4 border-t border-slate-700">
-                    <a href="#/" className="text-sm text-slate-400 hover:text-teal-400">← Back to TRAVEL PAY</a>
+                <div className="px-4 py-4 border-t border-slate-700/50">
+                    <NavItem
+                        icon={ICONS.logout}
+                        label="Logout"
+                        isActive={false}
+                        onClick={handleLogout}
+                    />
                 </div>
             </aside>
              {isOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsOpen(false)}></div>}

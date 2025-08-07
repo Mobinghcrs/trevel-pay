@@ -1,7 +1,7 @@
 
 import {
   Flight, Hotel, Car, Driver, UserProfile, Wallet, CryptoCurrency, PhysicalCurrency, P2POffer, P2POrder,
-  CashDeliveryRequest, AdminUser, RevenueDataPoint, P2PVolume, TopCurrency, RevenueSettings, Room, Store, Product, ShoppingCategory, Order, ProductOrder, BankTransferOrder, BankRecipientDetails, ShippingAddress, CarBooking, FlightOrder, Passenger, PromoSlide, Agent, AgentTransaction, FinancialAccount, JournalEntry, LedgerEntry, FinancialSummary, VirtualCard, Transaction, PaymentRequest, Merchant, HotelGuest, HotelBookingOrder
+  CashDeliveryRequest, AdminUser, RevenueDataPoint, P2PVolume, TopCurrency, RevenueSettings, Room, Store, Product, ShoppingCategory, Order, ProductOrder, BankTransferOrder, BankRecipientDetails, ShippingAddress, CarBooking, FlightOrder, Passenger, PromoSlide, Agent, AgentTransaction, FinancialAccount, JournalEntry, LedgerEntry, FinancialSummary, VirtualCard, Transaction, PaymentRequest, Merchant, HotelGuest, HotelBookingOrder, UserTransferOrder, RideOption, TaxiOrder, ESimPlan, ESimOrder
 } from '../types';
 import { ICONS, COMMON_CRYPTO_CURRENCIES, COMMON_FIAT_CURRENCIES } from '../constants';
 
@@ -34,6 +34,7 @@ let currentUserEmail: string | null = null;
 const users: { profile: UserProfile, role: 'user' | 'agent' | 'merchant', password?: string }[] = [
     {
         profile: {
+            userId: '@janedoe',
             name: 'Jane Doe',
             email: 'user@example.com',
             memberSince: '2023-01-15T10:00:00Z',
@@ -49,6 +50,7 @@ const users: { profile: UserProfile, role: 'user' | 'agent' | 'merchant', passwo
     },
     {
         profile: {
+            userId: '@globalexchange',
             name: 'Global Exchange',
             email: 'agent@example.com',
             memberSince: '2022-03-01T09:00:00Z',
@@ -64,6 +66,7 @@ const users: { profile: UserProfile, role: 'user' | 'agent' | 'merchant', passwo
     },
     {
         profile: {
+            userId: '@superstore',
             name: 'Super Store',
             email: 'merchant@example.com',
             memberSince: '2023-01-01T09:00:00Z',
@@ -85,6 +88,9 @@ let productOrders: ProductOrder[] = [];
 let bankTransferOrders: BankTransferOrder[] = [];
 let flightOrders: FlightOrder[] = [];
 let hotelBookingOrders: HotelBookingOrder[] = [];
+let userTransferOrders: UserTransferOrder[] = [];
+let taxiOrders: TaxiOrder[] = [];
+let esimOrders: ESimOrder[] = [];
 let agentTransactions: AgentTransaction[] = [];
 let transactions: Transaction[] = [];
 let paymentRequests: PaymentRequest[] = [];
@@ -141,12 +147,12 @@ const cars: Car[] = [
 let adminUsers: AdminUser[] = [
   { ...users.find(u => u.role === 'user')!.profile, id: 'user-123', status: 'Active', role: 'Admin', accountType: 'Registered' },
   { 
-    id: 'user-456', name: 'John Smith', email: 'john.smith@example.com', memberSince: '2023-05-20T10:00:00Z',
+    id: 'user-456', userId: '@johns', name: 'John Smith', email: 'john.smith@example.com', memberSince: '2023-05-20T10:00:00Z',
     avatarUrl: 'https://i.pravatar.cc/150?u=johnsmith', status: 'Active', role: 'Support', accountType: 'Registered',
     wallets: [{ type: 'Fiat', name: 'US Dollar', currency: 'USD', balance: 200 }],
   },
    { 
-    id: 'user-789', name: 'Maria Garcia', email: 'maria.garcia@example.com', memberSince: '2023-08-10T10:00:00Z',
+    id: 'user-789', userId: '@mariag', name: 'Maria Garcia', email: 'maria.garcia@example.com', memberSince: '2023-08-10T10:00:00Z',
     avatarUrl: 'https://i.pravatar.cc/150?u=mariagarcia', status: 'Suspended', role: 'Finance', accountType: 'Registered',
     wallets: [{ type: 'Fiat', name: 'Euro', currency: 'EUR', balance: 5000 }],
   },
@@ -161,6 +167,7 @@ let revenueSettings: RevenueSettings = {
     cashDelivery: { type: 'percentage', value: 3 },
   },
   marketplaceCommission: { type: 'percentage', value: 10 },
+  userTransfer: { type: 'percentage', value: 1.5 },
 };
 
 const shoppingCategories: ShoppingCategory[] = [
@@ -194,6 +201,15 @@ let agents: Agent[] = [
 
 let virtualCards: VirtualCard[] = [];
 
+let esimPlans: ESimPlan[] = [
+    { id: 'TR-5GB-7D', country: 'Turkey', dataAmountGB: 5, validityDays: 7, priceUSD: 12.50 },
+    { id: 'TR-10GB-15D', country: 'Turkey', dataAmountGB: 10, validityDays: 15, priceUSD: 20.00 },
+    { id: 'UAE-3GB-7D', country: 'UAE', dataAmountGB: 3, validityDays: 7, priceUSD: 15.00 },
+    { id: 'UAE-5GB-15D', country: 'UAE', dataAmountGB: 5, validityDays: 15, priceUSD: 24.00 },
+    { id: 'USA-10GB-30D', country: 'USA', dataAmountGB: 10, validityDays: 30, priceUSD: 30.00 },
+    { id: 'EU-10GB-30D', country: 'Europe', dataAmountGB: 10, validityDays: 30, priceUSD: 35.00 },
+];
+
 // --- ACCOUNTING SYSTEM ---
 const chartOfAccounts: FinancialAccount[] = [
     { id: '1010', name: 'House USD Bank Account', type: 'Asset', balance: 0 },
@@ -203,6 +219,7 @@ const chartOfAccounts: FinancialAccount[] = [
     { id: '3010', name: 'Owner Equity', type: 'Equity', balance: 0 },
     { id: '4010', name: 'Flight Booking Revenue', type: 'Revenue', balance: 0 },
     { id: '4020', name: 'P2P Exchange Fee Revenue', type: 'Revenue', balance: 0 },
+    { id: '4030', name: 'User Transfer Fee Revenue', type: 'Revenue', balance: 0 },
 ];
 let journal: JournalEntry[] = [];
 let ledger: LedgerEntry[] = [];
@@ -229,13 +246,13 @@ const postJournalEntry = (description: string, relatedDocumentId: string, debits
 
 // --- SERVICE FUNCTIONS ---
 
-export const authenticateInDb = (email: string, password: string, role: 'user' | 'agent' | 'merchant'): { name: string, email: string, role: 'user' | 'agent' | 'merchant' } => {
+export const authenticateInDb = (email: string, password: string, role: 'user' | 'agent' | 'merchant'): { name: string, email: string, role: 'user' | 'agent' | 'merchant', userId: string } => {
     const user = users.find(u => u.profile.email.toLowerCase() === email.toLowerCase() && u.password === password && u.role === role);
     if (!user) {
         throw new Error("Invalid email, password, or role.");
     }
     currentUserEmail = user.profile.email; // Set the currently "logged in" user
-    return { name: user.profile.name, role: user.role, email: user.profile.email };
+    return { name: user.profile.name, role: user.role, email: user.profile.email, userId: user.profile.userId };
 };
 
 export const findFlights = (origin: string, destination: string): Flight[] => flights;
@@ -296,7 +313,7 @@ export const createHotelBookingInDb = (hotel: Hotel, room: Room, guests: HotelGu
     return newOrder;
 };
 
-export const findCars = (location: string): Car[] => cars;
+export const findCars = (location: string, pickupDate: string, dropoffDate: string): Car[] => cars;
 
 export const createCarBookingInDb = (details: { car: Car; driver: Driver; pickupDate: string; dropoffDate: string; location: string; totalPrice: number; }): CarBooking => {
   const newBooking: CarBooking = { id: `booking-${Date.now()}`, ...details };
@@ -363,7 +380,7 @@ export const deleteWalletInDb = (currency: string): UserProfile => {
 
 // --- Order Functions ---
 export const getOrders = (): Order[] => {
-    const allOrders: Order[] = [...p2pOrders, ...productOrders, ...bankTransferOrders, ...flightOrders, ...hotelBookingOrders];
+    const allOrders: Order[] = [...p2pOrders, ...productOrders, ...bankTransferOrders, ...flightOrders, ...hotelBookingOrders, ...userTransferOrders, ...taxiOrders, ...esimOrders];
     return allOrders.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 };
 
@@ -444,6 +461,49 @@ export const createProductOrderInDb = (product: Product, shippingAddress: Shippi
     return newOrder;
 }
 
+// --- Ride Hailing Functions ---
+export const searchRidesInDb = (from: string, to: string): RideOption[] => {
+    // Simulate getting prices and ETAs from Snapp and Tapsi
+    const snappPrice = Math.floor(Math.random() * 200000) + 100000;
+    const tapsiPrice = snappPrice * (Math.random() * 0.2 + 0.9); // Tapsi price is between 90% and 110% of Snapp's
+
+    return [
+        { provider: 'Snapp', rideType: 'Eco', price: snappPrice, eta: Math.floor(Math.random() * 5) + 2 },
+        { provider: 'Snapp', rideType: 'Premium', price: snappPrice * 1.5, eta: Math.floor(Math.random() * 5) + 1 },
+        { provider: 'Tapsi', rideType: 'Eco', price: tapsiPrice, eta: Math.floor(Math.random() * 6) + 3 },
+        { provider: 'Tapsi', rideType: 'Premium', price: tapsiPrice * 1.6, eta: Math.floor(Math.random() * 5) + 2 },
+    ];
+};
+
+export const bookRideInDb = (option: RideOption, from: string, to: string): TaxiOrder => {
+    const profile = getProfile();
+    const usdWallet = profile.wallets.find(w => w.currency === 'USD'); // Assuming payment from USD wallet for now
+    if (!usdWallet || usdWallet.balance < (option.price / 400000)) { // Assuming a rough conversion rate for validation
+        throw new Error(`Insufficient USD balance for this ride.`);
+    }
+    // In a real app, you'd convert IRR to USD and deduct. Here, we'll just deduct a small USD amount to simulate cost.
+    usdWallet.balance -= (option.price / 400000);
+
+    const newOrder: TaxiOrder = {
+        type: 'taxi',
+        id: `taxi-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        provider: option.provider,
+        rideType: option.rideType,
+        from,
+        to,
+        price: option.price,
+        driverInfo: {
+            name: option.provider === 'Snapp' ? 'Ali Rezaei' : 'Sara Ahmadi',
+            carModel: option.provider === 'Snapp' ? 'Peugeot 206' : 'Saipa Tiba',
+            licensePlate: `${Math.floor(Math.random()*90)+10} | ${Math.floor(Math.random()*900)+100}`,
+            rating: 4.8,
+        },
+    };
+    taxiOrders.push(newOrder);
+    return newOrder;
+};
+
 // --- Exchange Functions ---
 export const addCashRequest = (request: Omit<CashDeliveryRequest, 'id' | 'user' | 'timestamp' | 'status'>): CashDeliveryRequest => {
     const newRequest: CashDeliveryRequest = {
@@ -492,9 +552,17 @@ export const getProductsByCategoryFromDb = (categoryName: string): Product[] => 
 
 // --- Agent Role Functions ---
 export const findUserByEmailInDb = (email: string): UserProfile => {
-    const userAccount = users.find(u => u.profile.email.toLowerCase() === email.toLowerCase() && u.role === 'user');
+    const userAccount = users.find(u => u.profile.email.toLowerCase() === email.toLowerCase());
     if (!userAccount) {
-        throw new Error("No user found with that email, or the email belongs to an agent.");
+        throw new Error("No user found with that email.");
+    }
+    return userAccount.profile;
+};
+
+export const findUserByUserIdInDb = (userId: string): UserProfile => {
+    const userAccount = users.find(u => u.profile.userId.toLowerCase() === userId.toLowerCase());
+    if (!userAccount) {
+        throw new Error("No user found with that user ID.");
     }
     return userAccount.profile;
 };
@@ -542,16 +610,13 @@ export const agentTransferToUserInDb = (userEmail: string, amount: number, curre
 
 export const getAgentTransactionsFromDb = (startDate: string, endDate: string): AgentTransaction[] => {
     const start = new Date(startDate);
-    start.setUTCHours(0, 0, 0, 0);
-    const startTime = start.getTime();
-
+    start.setHours(0, 0, 0, 0);
     const end = new Date(endDate);
-    end.setUTCHours(23, 59, 59, 999);
-    const endTime = end.getTime();
+    end.setHours(23, 59, 59, 999);
 
     return agentTransactions.filter(tx => {
-        const txTime = new Date(tx.timestamp).getTime();
-        return txTime >= startTime && txTime <= endTime;
+        const txDate = new Date(tx.timestamp);
+        return txDate >= start && txDate <= end;
     });
 };
 
@@ -568,6 +633,77 @@ export const findUserByCardNumberInDb = (cardNumber: string): { user: UserProfil
     }
 
     return { user: userAccount.profile, card };
+};
+
+// --- User to User Transfer ---
+export const initiateUserTransferInDb = (receiverUserId: string, amount: number, currency: string): UserProfile => {
+    const sender = getProfile();
+    const receiver = findUserByUserIdInDb(receiverUserId);
+
+    if (sender.email === receiver.email) {
+        throw new Error("You cannot send money to yourself.");
+    }
+
+    const senderWallet = sender.wallets.find(w => w.currency === currency);
+    let receiverWallet = receiver.wallets.find(w => w.currency === currency);
+
+    if (!senderWallet) {
+        throw new Error(`You do not have a ${currency} wallet.`);
+    }
+    
+    const feeConfig = revenueSettings.userTransfer;
+    const fee = feeConfig.type === 'fixed' ? feeConfig.value : amount * (feeConfig.value / 100);
+    const totalDeducted = amount + fee;
+
+    if (senderWallet.balance < totalDeducted) {
+        throw new Error(`Insufficient balance. You need ${totalDeducted.toFixed(2)} ${currency} to complete this transfer.`);
+    }
+
+    if (!receiverWallet) {
+         const asset = [...COMMON_CRYPTO_CURRENCIES, ...COMMON_FIAT_CURRENCIES].find(c => c.symbol === currency);
+        receiverWallet = {
+            type: COMMON_FIAT_CURRENCIES.some(c => c.symbol === currency) ? 'Fiat' : 'Crypto',
+            name: asset?.name || currency,
+            currency: currency,
+            balance: 0,
+        };
+        receiver.wallets.push(receiverWallet);
+    }
+
+    senderWallet.balance -= totalDeducted;
+    receiverWallet.balance += amount;
+    
+    const newOrder: UserTransferOrder = {
+        type: 'user-transfer',
+        id: `usr-tx-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        senderId: sender.userId,
+        senderEmail: sender.email,
+        senderName: sender.name,
+        receiverId: receiver.userId,
+        receiverEmail: receiver.email,
+        receiverName: receiver.name,
+        amountSent: amount,
+        fee: fee,
+        amountReceived: amount,
+        currency: currency,
+    };
+    userTransferOrders.push(newOrder);
+
+    // --- ACCOUNTING ---
+    // For simplicity, we assume all transfers use the main USD liability account
+    postJournalEntry(
+        `User Transfer: ${sender.name} to ${receiver.name}`,
+        newOrder.id,
+        [{ accountId: '2010', amount: totalDeducted }], // Debit (reduce) sender's liability
+        [
+            { accountId: '2010', amount: amount }, // Credit (increase) receiver's liability
+            { accountId: '4030', amount: fee } // Credit (increase) revenue
+        ]
+    );
+    // --- END ACCOUNTING ---
+    
+    return sender;
 };
 
 // --- Virtual Card Functions ---
@@ -620,6 +756,37 @@ export const updateVirtualCardStatusInDb = (cardId: string, status: VirtualCard[
     }
     card.status = status;
     return card;
+};
+
+// --- eSIM Functions ---
+export const getESimPlansInDb = (country: string): ESimPlan[] => {
+    return esimPlans.filter(p => p.country === country);
+};
+
+export const purchaseESimInDb = (planId: string): ESimOrder => {
+    const plan = esimPlans.find(p => p.id === planId);
+    if (!plan) {
+        throw new Error("eSIM plan not found.");
+    }
+    const profile = getProfile();
+    const usdWallet = profile.wallets.find(w => w.currency === 'USD');
+
+    if (!usdWallet || usdWallet.balance < plan.priceUSD) {
+        throw new Error(`Insufficient USD balance. You need $${plan.priceUSD.toFixed(2)}.`);
+    }
+    usdWallet.balance -= plan.priceUSD;
+
+    const qrCodeValue = `LPA:1$smdp.travelpay.com$${plan.id}-${Date.now()}`;
+
+    const newOrder: ESimOrder = {
+        type: 'esim',
+        id: `esim-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        plan: plan,
+        qrCodeValue: qrCodeValue,
+    };
+    esimOrders.push(newOrder);
+    return newOrder;
 };
 
 // --- MERCHANT FUNCTIONS ---
@@ -716,12 +883,13 @@ export const updateAdminCashRequestStatusInDb = (id: string, status: 'Approved' 
 
 export const getAdminUsersData = (): AdminUser[] => adminUsers;
 
-export const createAdminUserInDb = (userData: Omit<AdminUser, 'id' | 'memberSince' | 'wallets' | 'avatarUrl'>): AdminUser => {
+export const createAdminUserInDb = (userData: Omit<AdminUser, 'id' | 'memberSince' | 'wallets' | 'avatarUrl' | 'userId'>): AdminUser => {
     if (adminUsers.some(u => u.email.toLowerCase() === userData.email.toLowerCase())) {
         throw new Error("An account with this email already exists.");
     }
     const newUser: AdminUser = {
         id: `user-${Date.now()}`,
+        userId: `@${userData.name.toLowerCase().replace(/\s/g, '')}`,
         ...userData,
         memberSince: new Date().toISOString(),
         avatarUrl: `https://i.pravatar.cc/150?u=${userData.email}`,

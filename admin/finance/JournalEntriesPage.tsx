@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { JournalEntry } from '../../types';
 import { getJournalEntries } from '../../services/apiService';
@@ -53,7 +54,7 @@ const JournalEntriesPage: React.FC = () => {
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{new Date(entry.timestamp).toLocaleString()}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{entry.description}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-500">{entry.relatedDocumentId}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-800">${entry.entries.find(e => e.type === 'debit')?.amount.toFixed(2)}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-800">${entry.entries.find(e => e.type === 'debit')?.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                     </tr>
                                     {expandedEntry === entry.id && (
                                         <tr>
@@ -72,8 +73,8 @@ const JournalEntriesPage: React.FC = () => {
                                                             {entry.entries.map(line => (
                                                                 <tr key={line.id} className="border-b last:border-b-0">
                                                                     <td className="py-1">{line.accountName}</td>
-                                                                    <td className="py-1 text-right font-mono">{line.type === 'debit' ? `$${line.amount.toFixed(2)}` : ''}</td>
-                                                                    <td className="py-1 text-right font-mono">{line.type === 'credit' ? `$${line.amount.toFixed(2)}` : ''}</td>
+                                                                    <td className="py-1 text-right font-mono">{line.type === 'debit' ? `$${line.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : ''}</td>
+                                                                    <td className="py-1 text-right font-mono">{line.type === 'credit' ? `$${line.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : ''}</td>
                                                                 </tr>
                                                             ))}
                                                         </tbody>

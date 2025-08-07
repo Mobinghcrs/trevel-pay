@@ -26,8 +26,8 @@ const P2POfferCard: React.FC<P2POfferCardProps> = ({ offer, onTrade }) => {
                             </span>
                         </p>
                         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
-                           <p>Price: <span className="font-mono text-slate-800">{offer.pricePerUnit.toFixed(2)} LCU</span></p>
-                           <p>Trade Amount: <span className="font-mono text-slate-800">{offer.amountAvailable.toFixed(2)} {offer.currency}</span></p>
+                           <p>Price: <span className="font-mono text-slate-800">{offer.pricePerUnit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} LCU</span></p>
+                           <p>Trade Amount: <span className="font-mono text-slate-800">{offer.amountAvailable.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {offer.currency}</span></p>
                         </div>
                     </div>
                     <div className="flex-shrink-0 md:hidden">

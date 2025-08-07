@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { LedgerEntry, FinancialAccount } from '../../types';
 import { getGeneralLedger, getChartOfAccounts } from '../../services/apiService';
@@ -74,8 +75,8 @@ const GeneralLedgerPage: React.FC = () => {
                                 <tr key={entry.id}>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(entry.timestamp).toLocaleString()}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{entry.accountName}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-mono">{entry.type === 'debit' ? `$${entry.amount.toFixed(2)}` : ''}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-mono">{entry.type === 'credit' ? `$${entry.amount.toFixed(2)}` : ''}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-mono">{entry.type === 'debit' ? `$${entry.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : ''}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-mono">{entry.type === 'credit' ? `$${entry.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : ''}</td>
                                 </tr>
                             ))}
                         </tbody>

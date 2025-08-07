@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { ShoppingCategory, Product, ProductOrder, ShoppingStep, ShippingAddress, VirtualCard, Wallet } from '../../types';
 import { getShoppingCategories, getProductsByCategory, createProductOrder, getVirtualCards, getUserProfile } from '../../services/apiService';
@@ -88,7 +89,7 @@ const ProductDetailView: React.FC<{ product: Product; onBack: () => void; onProc
                 <span className="text-sm font-semibold text-sky-600 uppercase">{product.category}</span>
                 <h1 className="text-3xl font-bold text-slate-900 my-2">{product.name}</h1>
                 <p className="text-slate-600 flex-grow mb-4">{product.description}</p>
-                <div className="text-4xl font-extrabold text-slate-800 mb-6">${product.price.toFixed(2)}</div>
+                <div className="text-4xl font-extrabold text-slate-800 mb-6">${product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                 <div className="mt-auto space-y-2">
                     <button onClick={onProceed} className="w-full bg-sky-600 text-white py-3 rounded-md font-semibold hover:bg-sky-500 transition-colors">
                         Proceed to Buy
@@ -183,7 +184,7 @@ const CheckoutView: React.FC<{ product: Product; onBack: () => void; onConfirm: 
                             <div className="bg-slate-50 p-4 rounded-lg flex items-center gap-4">
                                 <img src={product.imageUrl} alt={product.name} className="h-16 w-16 rounded-md object-cover bg-white"/>
                                 <p className="font-semibold text-slate-800 flex-grow">{product.name}</p>
-                                <p className="font-bold text-lg text-slate-800">${product.price.toFixed(2)}</p>
+                                <p className="font-bold text-lg text-slate-800">${product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                             </div>
                         </div>
                     </div>
@@ -215,7 +216,7 @@ const InvoiceView: React.FC<{ order: ProductOrder; onBack: () => void; }> = ({ o
         (doc as any).autoTable({
             startY: 45,
             head: [['Item', 'Description', 'Price']],
-            body: [[order.product.name, order.product.description, `$${order.totalPrice.toFixed(2)}`]],
+            body: [[order.product.name, order.product.description, `$${order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`]],
             theme: 'striped',
         });
         
@@ -271,12 +272,12 @@ const InvoiceView: React.FC<{ order: ProductOrder; onBack: () => void; }> = ({ o
                     <div className="flex-grow">
                         <p className="font-semibold text-slate-800">{order.product.name}</p>
                     </div>
-                    <p className="font-semibold text-slate-800">${order.totalPrice.toFixed(2)}</p>
+                    <p className="font-semibold text-slate-800">${order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
                 
                  <div className="flex justify-between text-lg font-bold text-slate-900 border-t border-slate-200 pt-4 mt-6">
                     <span>Total Paid</span>
-                    <span>${order.totalPrice.toFixed(2)}</span>
+                    <span>${order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 </div>
 
                 <div className="mt-8 flex flex-col sm:flex-row gap-2">

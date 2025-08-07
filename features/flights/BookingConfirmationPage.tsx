@@ -101,7 +101,7 @@ const BookingConfirmationPage: React.FC<BookingConfirmationPageProps> = ({ fligh
                   <div className="p-4 space-y-2">
                       <div className="flex justify-between text-slate-600">
                           <span>Ticket Price</span>
-                          <span>${flight.price.toFixed(2)}</span>
+                          <span>${flight.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                       </div>
                        <div className="flex justify-between text-slate-600">
                           <span>Passengers</span>
@@ -109,7 +109,7 @@ const BookingConfirmationPage: React.FC<BookingConfirmationPageProps> = ({ fligh
                       </div>
                       <div className="flex justify-between text-slate-900 font-bold text-xl border-t border-slate-200 pt-3 mt-3">
                           <span>Total Price</span>
-                          <span>${totalPrice.toFixed(2)}</span>
+                          <span>${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                       </div>
                   </div>
               </Card>

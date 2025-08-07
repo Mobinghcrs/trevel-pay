@@ -32,7 +32,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, onSelect }) => {
         </div>
         <div className="mt-auto flex justify-between items-center pt-4 border-t border-slate-200">
             <div>
-                <p className="text-xl font-bold text-slate-800">${car.pricePerDay.toFixed(2)}</p>
+                <p className="text-xl font-bold text-slate-800">${car.pricePerDay.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 <p className="text-xs text-slate-500">/ per day</p>
             </div>
             <button

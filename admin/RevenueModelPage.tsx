@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { RevenueSettings } from '../types';
 import Spinner from '../components/Spinner';
@@ -83,6 +84,11 @@ const RevenueModelPage: React.FC = () => {
                     title="Marketplace Commission"
                     feeModel={settings.marketplaceCommission}
                     onChange={(newModel) => setSettings({ ...settings, marketplaceCommission: newModel })}
+                />
+                 <RevenueModelCard
+                    title="User to User Transfer Fee"
+                    feeModel={settings.userTransfer}
+                    onChange={(newModel) => setSettings({ ...settings, userTransfer: newModel })}
                 />
                  <div className="md:col-span-2 lg:col-span-3">
                     <div className="bg-white border border-slate-200 rounded-lg p-5">

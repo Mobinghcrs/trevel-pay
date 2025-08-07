@@ -1,4 +1,6 @@
 
+
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { ICONS } from '../../constants';
 import { Order } from '../../types';
@@ -8,6 +10,9 @@ import ProductOrderCard from './ProductOrderCard';
 import BankTransferOrderCard from './BankTransferOrderCard';
 import FlightOrderCard from './FlightOrderCard';
 import HotelOrderCard from './HotelOrderCard';
+import UserTransferOrderCard from './UserTransferOrderCard';
+import TaxiOrderCard from './TaxiOrderCard';
+import ESimOrderCard from './ESimOrderCard';
 import { getOrders } from '../../services/apiService';
 import Spinner from '../../components/Spinner';
 
@@ -46,6 +51,12 @@ const OrdersPage: React.FC = () => {
             return <FlightOrderCard key={order.id} order={order} />;
         case 'hotel':
             return <HotelOrderCard key={order.id} order={order} />;
+        case 'user-transfer':
+            return <UserTransferOrderCard key={order.id} order={order} />;
+        case 'taxi':
+            return <TaxiOrderCard key={order.id} order={order} />;
+        case 'esim':
+            return <ESimOrderCard key={order.id} order={order} />;
         default:
             return null;
     }

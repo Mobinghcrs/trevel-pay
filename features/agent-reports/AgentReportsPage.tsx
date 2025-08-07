@@ -68,8 +68,8 @@ const AgentReportsPage: React.FC = () => {
             body: transactions.map(tx => [
                 new Date(tx.timestamp).toLocaleString(),
                 tx.userEmail,
-                `${tx.amount.toFixed(2)} ${tx.currency}`,
-                `${tx.commission.toFixed(2)} ${tx.currency}`
+                `${tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${tx.currency}`,
+                `${tx.commission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${tx.currency}`
             ]),
             didDrawPage: (data: any) => {
                 doc.text('Agent Transaction Report', 14, 15);
@@ -125,8 +125,8 @@ const AgentReportsPage: React.FC = () => {
                                     <tr key={tx.id}>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{new Date(tx.timestamp).toLocaleString()}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{tx.userEmail}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-mono">{tx.amount.toFixed(2)} {tx.currency}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-mono font-semibold">{tx.commission.toFixed(2)} {tx.currency}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 font-mono">{tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {tx.currency}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-mono font-semibold">{tx.commission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {tx.currency}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-500">{tx.id.slice(-8)}</td>
                                     </tr>
                                 ))

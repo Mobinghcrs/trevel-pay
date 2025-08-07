@@ -1,7 +1,9 @@
 
+
+
 import React from 'react';
 
-export type Page = 'login' | 'home' | 'flights' | 'exchange' | 'profile' | 'orders' | 'notifications' | 'hotel' | 'car-rental' | 'shopping' | 'agents' | 'agent-transfer' | 'cards' | 'agent-reports';
+export type Page = 'login' | 'home' | 'flights' | 'exchange' | 'profile' | 'orders' | 'notifications' | 'hotel' | 'car-rental' | 'shopping' | 'agents' | 'agent-transfer' | 'cards' | 'agent-reports' | 'merchant-pos' | 'user-transfer' | 'taxi' | 'sim';
 export type ExchangeTab = 'rates' | 'p2p' | 'bank' | 'delivery' | 'swap' | 'ai-analyst';
 export type FlightBookingStep = 'search' | 'passengers' | 'confirmation' | 'ticket';
 export type HotelBookingStep = 'search' | 'guests' | 'confirmation' | 'success';
@@ -11,6 +13,8 @@ export type P2PCurrencyType = 'digital' | 'physical';
 export type P2PTradeStep = 'selection' | 'list' | 'trade';
 export type P2PTransactionType = 'BUY' | 'SELL';
 export type ShoppingStep = 'list' | 'details' | 'checkout' | 'invoice';
+export type TaxiStep = 'map_selection' | 'options' | 'payment' | 'booking' | 'tracking';
+export type SimStep = 'country_select' | 'plan_list' | 'payment' | 'activation';
 
 
 export interface AuthState {
@@ -18,7 +22,8 @@ export interface AuthState {
   user?: {
     name: string;
     role: 'user' | 'agent' | 'guest' | 'merchant' | 'admin';
-    email?: string; // Add email to user object for identifying merchants
+    email?: string;
+    userId?: string;
   };
 }
 
@@ -180,6 +185,7 @@ export interface Wallet {
 }
 
 export interface UserProfile {
+  userId: string;
   name: string;
   email: string;
   memberSince: string;
@@ -299,7 +305,66 @@ export interface HotelBookingOrder {
     totalPrice: number;
 }
 
-export type Order = P2POrder | ProductOrder | BankTransferOrder | FlightOrder | HotelBookingOrder;
+export interface UserTransferOrder {
+    type: 'user-transfer';
+    id: string;
+    timestamp: string;
+    senderId: string;
+    senderEmail: string;
+    senderName: string;
+    receiverId: string;
+    receiverEmail: string;
+    receiverName: string;
+    amountSent: number;
+    fee: number;
+    amountReceived: number;
+    currency: string;
+}
+
+export type RideProvider = 'Snapp' | 'Tapsi';
+export type TaxiRideType = 'Eco' | 'Premium';
+
+export interface RideOption {
+  provider: RideProvider;
+  rideType: TaxiRideType;
+  price: number;
+  eta: number; // minutes
+}
+
+export interface TaxiOrder {
+    type: 'taxi';
+    id: string;
+    timestamp: string;
+    provider: RideProvider;
+    rideType: TaxiRideType;
+    from: string;
+    to: string;
+    price: number;
+    driverInfo: {
+        name: string;
+        carModel: string;
+        licensePlate: string;
+        rating: number;
+    };
+}
+
+export interface ESimPlan {
+    id: string;
+    country: string;
+    dataAmountGB: number;
+    validityDays: number;
+    priceUSD: number;
+}
+
+export interface ESimOrder {
+    type: 'esim';
+    id: string;
+    timestamp: string;
+    plan: ESimPlan;
+    qrCodeValue: string; // This will be a stringified JSON for the QR code
+}
+
+export type Order = P2POrder | ProductOrder | BankTransferOrder | FlightOrder | HotelBookingOrder | UserTransferOrder | TaxiOrder | ESimOrder;
 
 
 // --- Analytics Types ---
@@ -338,6 +403,7 @@ export interface RevenueSettings {
   hotelBooking: FeeModel;
   exchange: ExchangeFeeSettings;
   marketplaceCommission: FeeModel;
+  userTransfer: FeeModel;
 }
 
 // --- Agent Types ---

@@ -70,6 +70,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ profile, isEditing, o
                     />
                     <h2 className="text-2xl font-bold text-slate-900">{profile.name}</h2>
                     <p className="text-slate-600">{profile.email}</p>
+                    <p className="text-slate-500 font-mono text-sm mt-1">{profile.userId}</p>
                     <p className="mt-4 text-xs text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
                         Member since {formatDate(profile.memberSince)}
                     </p>

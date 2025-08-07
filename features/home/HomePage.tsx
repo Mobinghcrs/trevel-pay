@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect } from 'react';
 import { ICONS } from '../../constants';
 import { useNavigation } from '../../contexts/NavigationContext';
@@ -221,13 +222,14 @@ const UserDashboard: React.FC<{ user: AuthState['user'] }> = ({ user }) => {
   const features = [
     { title: 'Flights', icon: ICONS.plane, action: () => navigate('flights') },
     { title: 'Exchange', icon: ICONS.exchange, action: () => navigate('exchange') },
+    { title: 'Send Money', icon: ICONS.userArrows, action: () => navigate('user-transfer') },
     { title: 'Hotels', icon: ICONS.hotel, action: () => navigate('hotel') },
     { title: 'Car Rental', icon: ICONS.car, action: () => navigate('car-rental') },
     { title: 'Shopping', icon: ICONS.store, action: () => navigate('shopping') },
     { title: 'Agents', icon: ICONS.buildingStorefront, action: () => navigate('agents') },
-    { title: 'Taxi', icon: ICONS.taxi, action: comingSoonAlert('Taxi'), comingSoon: true },
+    { title: 'Taxi', icon: ICONS.taxi, action: () => navigate('taxi') },
     { title: 'Stays', icon: ICONS.accommodation, action: comingSoonAlert('Stays'), comingSoon: true },
-    { title: 'eSIM', icon: ICONS.sim, action: comingSoonAlert('eSIM'), comingSoon: true },
+    { title: 'eSIM', icon: ICONS.sim, action: () => navigate('sim') },
     { title: 'Tours', icon: ICONS.tourism, action: comingSoonAlert('Tours'), comingSoon: true },
   ];
 
@@ -274,6 +276,7 @@ const AgentDashboard: React.FC<{ user: AuthState['user'] }> = ({ user }) => {
 
   const agentFeatures: { title: string; icon: React.ReactNode; action: () => void; comingSoon?: boolean; }[] = [
     { title: 'Credit User', icon: ICONS.userPlus, action: () => navigate('agent-transfer') },
+    { title: 'Send Money', icon: ICONS.userArrows, action: () => navigate('user-transfer') },
     { title: 'Exchange', icon: ICONS.exchange, action: () => navigate('exchange') },
     { title: 'Flights', icon: ICONS.plane, action: () => navigate('flights') },
     { title: 'Reports', icon: ICONS.chartBar, action: () => navigate('agent-reports') },
@@ -300,6 +303,53 @@ const AgentDashboard: React.FC<{ user: AuthState['user'] }> = ({ user }) => {
   );
 };
 
+const MerchantDashboard: React.FC<{ user: AuthState['user'] }> = ({ user }) => {
+    const { navigate } = useNavigation();
+    const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+
+    useEffect(() => {
+        const loadProfile = async () => {
+        setIsLoadingProfile(true);
+        try {
+            const profileData = await getUserProfile();
+            setProfile(profileData);
+        } catch (error) {
+            console.error("Failed to load merchant profile", error);
+        } finally {
+            setIsLoadingProfile(false);
+        }
+        };
+        loadProfile();
+    }, []);
+
+    const merchantFeatures = [
+        { title: 'Point of Sale', icon: ICONS.calculator, action: () => navigate('merchant-pos') },
+        { title: 'Transactions', icon: ICONS.orders, action: () => navigate('orders') },
+        { title: 'Full Panel', icon: ICONS.dashboard, action: () => window.location.hash = '#/merchant' },
+    ];
+
+    return (
+        <>
+        <WalletSummary wallets={profile?.wallets} isLoading={isLoadingProfile} />
+        <div className="max-w-5xl mx-auto mt-12">
+            <div className="text-xl font-bold text-slate-900 mb-4 px-1">Merchant Tools</div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-6 gap-x-6">
+            {merchantFeatures.map((feature) => (
+                <FeatureCard
+                key={feature.title}
+                title={feature.title}
+                icon={feature.icon}
+                onClick={feature.action}
+                />
+            ))}
+            </div>
+        </div>
+        </>
+    );
+};
+
+
 interface HomePageProps {
     user?: {
         name: string;
@@ -318,24 +368,6 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
     merchant: "Welcome to your Merchant Dashboard."
   };
 
-  if (role === 'merchant') {
-    return (
-        <div>
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-slate-900">Hello, {displayName}</h1>
-                <p className="mt-1 text-slate-600">{welcomeMessage[role]}</p>
-            </div>
-            <Card className="p-6 text-center">
-                <p>You can manage your store from the merchant panel.</p>
-                <a href="#/merchant" className="text-teal-600 hover:underline font-semibold mt-2 inline-block">
-                    Go to Merchant Panel
-                </a>
-            </Card>
-        </div>
-    );
-  }
-
-
   return (
     <div>
       <div className="mb-8">
@@ -343,7 +375,9 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
         <p className="mt-1 text-slate-600">{welcomeMessage[role as keyof typeof welcomeMessage]}</p>
       </div>
       
-      {role === 'agent' ? <AgentDashboard user={user} /> : <UserDashboard user={user} />}
+      {role === 'agent' && <AgentDashboard user={user} />}
+      {role === 'merchant' && <MerchantDashboard user={user} />}
+      {(role === 'user' || role === 'guest') && <UserDashboard user={user} />}
     </div>
   );
 };

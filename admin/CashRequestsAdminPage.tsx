@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { CashDeliveryRequest } from '../types';
 import { getAdminCashRequests, updateAdminCashRequestStatus } from '../services/apiService';
@@ -52,9 +51,9 @@ const CashRequestsAdminPage: React.FC = () => {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-6">Cash Delivery Requests</h1>
+            <h1 className="text-2xl font-bold text-slate-900 mb-6">Cash Delivery Requests</h1>
             {error && <div className="text-center text-red-600 bg-red-100 p-4 rounded-md mb-4">{error}</div>}
-            <div className="bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
+            <Card className="overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-slate-200">
                         <thead className="bg-slate-50">
@@ -94,7 +93,7 @@ const CashRequestsAdminPage: React.FC = () => {
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </Card>
         </div>
     );
 };

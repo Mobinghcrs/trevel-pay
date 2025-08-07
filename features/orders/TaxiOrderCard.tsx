@@ -1,41 +1,42 @@
+
 import React from 'react';
-import { FlightOrder } from '../../types';
+import { TaxiOrder } from '../../types';
 import Card from '../../components/Card';
 import { ICONS } from '../../constants';
 
-interface FlightOrderCardProps {
-  order: FlightOrder;
+interface TaxiOrderCardProps {
+  order: TaxiOrder;
 }
 
-const FlightOrderCard: React.FC<FlightOrderCardProps> = ({ order }) => {
+const TaxiOrderCard: React.FC<TaxiOrderCardProps> = ({ order }) => {
     return (
         <Card className="border-slate-200">
             <div className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <div className="flex-shrink-0">
                     <div className="p-3 rounded-full bg-slate-100 text-teal-600">
-                        {ICONS.plane}
+                        {ICONS.taxi}
                     </div>
                 </div>
 
                 <div className="flex-grow grid grid-cols-2 sm:grid-cols-4 gap-4 items-center w-full">
                     <div>
-                        <p className="font-bold text-lg text-slate-800">Flight Booking</p>
+                        <p className="font-bold text-lg text-slate-800">Taxi Ride</p>
                         <p className="text-xs text-slate-500">{new Date(order.timestamp).toLocaleString()}</p>
                     </div>
 
                     <div>
                         <p className="text-sm text-slate-500">Route</p>
-                        <p className="font-semibold text-slate-800">{order.flight.origin.code} &rarr; {order.flight.destination.code}</p>
+                        <p className="font-semibold text-slate-800 truncate">{order.from} &rarr; {order.to}</p>
                     </div>
 
                     <div>
-                        <p className="text-sm text-slate-500">Airline</p>
-                        <p className="font-semibold text-slate-800">{order.flight.airline}</p>
+                        <p className="text-sm text-slate-500">Provider</p>
+                        <p className="font-semibold text-slate-800">{order.provider}</p>
                     </div>
 
                     <div>
-                        <p className="text-sm text-slate-500">Total Price</p>
-                        <p className="font-mono font-semibold text-slate-800">${order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <p className="text-sm text-slate-500">Price</p>
+                        <p className="font-mono font-semibold text-slate-800">{order.price.toLocaleString('fa-IR')} IRR</p>
                     </div>
                 </div>
             </div>
@@ -43,4 +44,4 @@ const FlightOrderCard: React.FC<FlightOrderCardProps> = ({ order }) => {
     );
 };
 
-export default FlightOrderCard;
+export default TaxiOrderCard;

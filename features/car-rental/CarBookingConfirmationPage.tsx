@@ -90,16 +90,16 @@ const CarBookingConfirmationPage: React.FC<CarBookingConfirmationPageProps> = ({
                       <h3 className="text-xl font-bold text-slate-800 mb-4 border-b border-slate-200 pb-2">Price Summary</h3>
                       <div className="space-y-2 text-slate-600">
                           <div className="flex justify-between">
-                              <span>${car.pricePerDay.toFixed(2)} x {rentalDays} {rentalDays > 1 ? 'days' : 'day'}</span>
-                              <span>${subtotal.toFixed(2)}</span>
+                              <span>${car.pricePerDay.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} x {rentalDays} {rentalDays > 1 ? 'days' : 'day'}</span>
+                              <span>${subtotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                           </div>
                           <div className="flex justify-between">
                               <span>Taxes & Fees</span>
-                              <span>${taxes.toFixed(2)}</span>
+                              <span>${taxes.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                           </div>
                           <div className="flex justify-between text-slate-800 font-bold text-xl border-t border-slate-300 pt-3 mt-3">
                               <span>Total Price</span>
-                              <span>${totalPrice.toFixed(2)}</span>
+                              <span>${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                           </div>
                       </div>
                   </div>

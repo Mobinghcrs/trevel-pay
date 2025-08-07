@@ -89,15 +89,15 @@ const HotelConfirmationPage: React.FC<HotelConfirmationPageProps> = ({ hotel, ro
                               <div className="space-y-2 text-slate-600">
                                   <div className="flex justify-between">
                                       <span>{room.name} ({nights} {nights > 1 ? 'nights' : 'night'})</span>
-                                      <span>${roomTotal.toFixed(2)}</span>
+                                      <span>${roomTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                                   </div>
                                   <div className="flex justify-between">
                                       <span>Taxes & Fees (est.)</span>
-                                      <span>${taxes.toFixed(2)}</span>
+                                      <span>${taxes.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                                   </div>
                                   <div className="flex justify-between text-slate-800 font-bold text-xl border-t border-slate-300 pt-3 mt-3">
                                       <span>Total Price</span>
-                                      <span>${totalPrice.toFixed(2)}</span>
+                                      <span>${totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                                   </div>
                               </div>
                           </div>

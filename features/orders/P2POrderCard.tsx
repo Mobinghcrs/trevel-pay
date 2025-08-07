@@ -31,12 +31,12 @@ const P2POrderCard: React.FC<P2POrderCardProps> = ({ order }) => {
 
                     <div>
                         <p className="text-sm text-slate-500">Amount</p>
-                        <p className="font-mono font-semibold text-slate-800">{order.tradeAmount.toFixed(2)} {order.offer.currency}</p>
+                        <p className="font-mono font-semibold text-slate-800">{order.tradeAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {order.offer.currency}</p>
                     </div>
 
                     <div>
                         <p className="text-sm text-slate-500">Total Price</p>
-                        <p className="font-mono font-semibold text-slate-800">{order.totalPrice.toFixed(2)} {order.localCurrency}</p>
+                        <p className="font-mono font-semibold text-slate-800">{order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {order.localCurrency}</p>
                     </div>
 
                     <div>

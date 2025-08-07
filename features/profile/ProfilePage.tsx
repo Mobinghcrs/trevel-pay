@@ -86,6 +86,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ isGuest }) => {
     const profileData = profile || {
         name: 'Guest',
         email: 'guest@example.com',
+        userId: '@guest',
         memberSince: new Date().toISOString(),
         avatarUrl: 'https://i.pravatar.cc/150?u=guest',
         wallets: [],

@@ -38,7 +38,7 @@ const CarBookingSuccessPage: React.FC<CarBookingSuccessPageProps> = ({ booking, 
                 ['License No.', `${booking.driver.licenseNumber}`],
                 ['Pickup', `${booking.location} on ${formatDate(booking.pickupDate)}`],
                 ['Drop-off', `${booking.location} on ${formatDate(booking.dropoffDate)}`],
-                ['Total Paid', `$${booking.totalPrice.toFixed(2)}`],
+                ['Total Paid', `$${booking.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`],
             ],
             theme: 'striped',
         });
@@ -74,7 +74,7 @@ const CarBookingSuccessPage: React.FC<CarBookingSuccessPageProps> = ({ booking, 
                 <DetailItem label="Drop-off" value={`${booking.location} on ${formatDate(booking.dropoffDate)}`} />
                  <div className="flex justify-between text-lg font-bold text-slate-900 border-t border-slate-300 pt-3 mt-3">
                     <span>Total Paid</span>
-                    <span>${booking.totalPrice.toFixed(2)}</span>
+                    <span>${booking.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 </div>
             </div>
 

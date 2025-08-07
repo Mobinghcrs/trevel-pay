@@ -44,12 +44,12 @@ const BankTransferOrderCard: React.FC<BankTransferOrderCardProps> = ({ order }) 
 
                         <div>
                             <p className="text-sm text-slate-500">Sent</p>
-                            <p className="font-mono font-semibold text-red-600">- {order.fromAmount.toFixed(2)} {order.fromCurrency}</p>
+                            <p className="font-mono font-semibold text-red-600">- {order.fromAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {order.fromCurrency}</p>
                         </div>
 
                         <div>
                             <p className="text-sm text-slate-500">Received</p>
-                            <p className="font-mono font-semibold text-green-600">+ {order.toAmount.toFixed(2)} {order.toCurrency}</p>
+                            <p className="font-mono font-semibold text-green-600">+ {order.toAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {order.toCurrency}</p>
                         </div>
                         
                         <div className="flex items-center justify-between sm:justify-start gap-4 col-span-2 sm:col-span-1">
@@ -75,8 +75,8 @@ const BankTransferOrderCard: React.FC<BankTransferOrderCardProps> = ({ order }) 
                     </div>
                      <div className="bg-slate-100 p-4 rounded-lg space-y-3">
                         <h3 className="font-bold">Amounts</h3>
-                        <div className="flex justify-between"><span className="text-slate-600">You Sent:</span> <span className="font-mono font-semibold">{order.fromAmount.toFixed(2)} {order.fromCurrency}</span></div>
-                        <div className="flex justify-between"><span className="text-slate-600">Recipient Received:</span> <span className="font-mono font-semibold">{order.toAmount.toFixed(2)} {order.toCurrency}</span></div>
+                        <div className="flex justify-between"><span className="text-slate-600">You Sent:</span> <span className="font-mono font-semibold">{order.fromAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {order.fromCurrency}</span></div>
+                        <div className="flex justify-between"><span className="text-slate-600">Recipient Received:</span> <span className="font-mono font-semibold">{order.toAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {order.toCurrency}</span></div>
                     </div>
                     <div className="bg-slate-100 p-4 rounded-lg space-y-3">
                          <h3 className="font-bold">Recipient</h3>

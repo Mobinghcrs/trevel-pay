@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { AdminUser } from '../types';
 import { getAdminUsers, createAdminUser } from '../services/apiService';
@@ -8,6 +7,7 @@ import UserTableRow from './components/UserTableRow';
 import UserDetailModal from './components/UserDetailModal';
 import { ICONS } from '../constants';
 import UserFormModal from './components/UserFormModal';
+import Card from '../components/Card';
 
 const UserManagementPage: React.FC = () => {
     const [users, setUsers] = useState<AdminUser[]>([]);
@@ -67,15 +67,18 @@ const UserManagementPage: React.FC = () => {
 
     return (
         <div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <h1 className="text-3xl font-bold text-slate-900">User Management</h1>
-                <div className="w-full md:w-auto flex flex-col sm:flex-row gap-2">
-                    <input
+            <h1 className="text-2xl font-bold text-slate-900 mb-6">User Management</h1>
+
+            {error && <div className="text-center text-red-600 bg-red-100 p-4 rounded-md mb-4">{error}</div>}
+            
+            <Card className="overflow-hidden">
+                <div className="p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-50/50 border-b border-slate-200">
+                     <input
                         type="text"
                         placeholder="Search by name or email..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full sm:w-64 px-4 py-2 bg-white border border-slate-300 rounded-md text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                        className="w-full md:w-64 px-4 py-2 bg-white border border-slate-300 rounded-md text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
                     />
                      <button 
                         onClick={() => setIsCreateModalOpen(true)}
@@ -85,11 +88,6 @@ const UserManagementPage: React.FC = () => {
                         <span>Create User</span>
                     </button>
                 </div>
-            </div>
-
-            {error && <div className="text-center text-red-600 bg-red-100 p-4 rounded-md mb-4">{error}</div>}
-            
-            <div className="bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-slate-200">
                         <thead className="bg-slate-50">
@@ -116,7 +114,7 @@ const UserManagementPage: React.FC = () => {
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </Card>
 
             {selectedUser && (
                 <UserDetailModal

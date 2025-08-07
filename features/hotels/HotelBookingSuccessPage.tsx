@@ -41,7 +41,7 @@ const HotelBookingSuccessPage: React.FC<HotelBookingSuccessPageProps> = ({ order
                 ['Room', order.room.name],
                 ['Check-in', formatDate(order.checkInDate)],
                 ['Check-out', `${formatDate(order.checkOutDate)} (${nights} nights)`],
-                ['Total Paid', `$${order.totalPrice.toFixed(2)}`],
+                ['Total Paid', `$${order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`],
             ],
             theme: 'striped',
         });
@@ -79,7 +79,7 @@ const HotelBookingSuccessPage: React.FC<HotelBookingSuccessPageProps> = ({ order
                 <DetailItem label="Duration" value={`${nights} ${nights > 1 ? 'nights' : 'night'}`} />
                  <div className="flex justify-between text-lg font-bold text-slate-900 border-t border-slate-300 pt-3 mt-3">
                     <span>Total Paid</span>
-                    <span>${order.totalPrice.toFixed(2)}</span>
+                    <span>${order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 </div>
             </div>
 

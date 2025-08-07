@@ -1,5 +1,4 @@
 
-
 import React, { useState } from 'react';
 import { AdminPage } from '../types';
 import Sidebar from './Sidebar';
@@ -13,6 +12,7 @@ import PromotionsAdminPage from './PromotionsAdminPage';
 import AgentManagementPage from './AgentManagementPage';
 import RolesPermissionsPage from './RolesPermissionsPage';
 import FinancePage from './FinancePage';
+import Header from './Header';
 
 const AdminPanel: React.FC = () => {
     const [page, setPage] = useState<AdminPage>('dashboard');
@@ -54,15 +54,11 @@ const AdminPanel: React.FC = () => {
                 setIsOpen={setIsSidebarOpen}
             />
             <div className="flex-1 flex flex-col min-w-0">
-                <header className="lg:hidden bg-white border-b border-slate-200 h-16 flex items-center px-4 sticky top-0 z-30 flex-shrink-0">
-                    <button onClick={() => setIsSidebarOpen(true)} className="p-2 text-slate-600 rounded-md hover:bg-slate-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
-                    <h1 className="text-lg font-bold ml-4 capitalize text-slate-900">{page.replace(/-/g, ' ')}</h1>
-                </header>
-                <main className="flex-1 p-6 lg:p-10 overflow-y-auto">
+                <Header 
+                    pageTitle={page.replace(/-/g, ' ')}
+                    onMenuClick={() => setIsSidebarOpen(true)}
+                />
+                <main className="flex-1 p-6 overflow-y-auto">
                     {renderPage()}
                 </main>
             </div>

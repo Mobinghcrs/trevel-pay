@@ -32,7 +32,7 @@ const HotelOrderCard: React.FC<HotelOrderCardProps> = ({ order }) => {
                     </div>
                     <div>
                         <p className="text-sm text-slate-500">Total Price</p>
-                        <p className="font-mono font-semibold text-slate-800">${order.totalPrice.toFixed(2)}</p>
+                        <p className="font-mono font-semibold text-slate-800">${order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 
 
 
+
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Page, AuthState, PaymentRequest } from './types';
 import Header from './components/Header';
@@ -24,21 +25,25 @@ import AiChatAssistant from './components/AiChatAssistant';
 import AgentReportsPage from './features/agent-reports/AgentReportsPage';
 import PaymentRequestModal from './features/merchant/components/PaymentRequestModal';
 import { getPendingPaymentRequest, processPayment } from './services/apiService';
+import MerchantPosPage from './features/merchant/MerchantPosPage';
+import UserTransferPage from './features/transfers/UserTransferPage';
+import TaxiPage from './features/taxi/TaxiPage';
+import SimPage from './features/sim/SimPage';
 
 export default function App(): React.ReactNode {
-  const [auth, setAuth] = useState<AuthState>({ isLoggedIn: false, user: { name: 'Guest', role: 'guest' } });
+  const [auth, setAuth] = useState<AuthState>({ isLoggedIn: false, user: { name: 'Guest', role: 'guest', userId: '@guest' } });
   const [page, setPage] = useState<Page>('login');
   const [pageContext, setPageContext] = useState<any>(null);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(null);
 
 
-  const handleLogin = useCallback((user: { name: string; email: string; role: 'user' | 'agent' | 'guest' | 'merchant' | 'admin' }) => {
+  const handleLogin = useCallback((user: { name: string; email: string; role: 'user' | 'agent' | 'guest' | 'merchant' | 'admin', userId?: string }) => {
     setAuth({ isLoggedIn: true, user });
     setPage('home');
   }, []);
 
   const handleLogout = useCallback(() => {
-    setAuth({ isLoggedIn: false, user: { name: 'Guest', role: 'guest' } });
+    setAuth({ isLoggedIn: false, user: { name: 'Guest', role: 'guest', userId: '@guest' } });
     setPage('login');
   }, []);
 
@@ -115,6 +120,14 @@ export default function App(): React.ReactNode {
         return <CardsPage />;
       case 'notifications':
         return <NotificationsPage />;
+      case 'merchant-pos':
+        return <MerchantPosPage />;
+      case 'user-transfer':
+        return <UserTransferPage />;
+      case 'taxi':
+        return <TaxiPage context={pageContext} />;
+      case 'sim':
+        return <SimPage />;
       default:
         return <HomePage user={auth.user} />;
     }
