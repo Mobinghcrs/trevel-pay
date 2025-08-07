@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { UserProfile, Wallet } from '../../types';
 import Card from '../../components/Card';
@@ -90,6 +91,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ isGuest }) => {
         memberSince: new Date().toISOString(),
         avatarUrl: 'https://i.pravatar.cc/150?u=guest',
         wallets: [],
+        investments: [],
     };
     
     return (

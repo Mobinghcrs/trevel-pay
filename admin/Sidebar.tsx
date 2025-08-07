@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { AdminPage } from '../types';
 import { ICONS } from '../constants';
@@ -12,7 +13,7 @@ interface SidebarProps {
 }
 
 const NavItem: React.FC<{
-    icon: React.ReactNode;
+    icon: React.ReactElement;
     label: string;
     isActive: boolean;
     onClick: () => void;
@@ -21,10 +22,13 @@ const NavItem: React.FC<{
     const activeClasses = "bg-teal-600 text-white shadow-sm";
     const inactiveClasses = "text-slate-400 hover:bg-slate-700/50 hover:text-white";
 
+    // Clone the icon to enforce a consistent size, overriding any size classes on the SVG itself.
+    const sizedIcon = React.cloneElement(icon, Object.assign({}, icon.props, { className: "h-5 w-5 flex-shrink-0" }));
+
     return (
         <li>
             <a href="#" onClick={e => { e.preventDefault(); onClick(); }} className={`${baseClasses} ${isActive ? activeClasses : inactiveClasses}`}>
-                <span className="h-5 w-5 flex-shrink-0">{icon}</span>
+                {sizedIcon}
                 <span className="flex-1">{label}</span>
             </a>
         </li>
@@ -98,6 +102,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activePage, setPage, isOpen, setIsOpe
                             label="Flight Management"
                             isActive={activePage === 'flight-management'}
                             onClick={() => handleNavClick('flight-management')}
+                        />
+                        <NavItem
+                            icon={ICONS.globe}
+                            label="Locations & Routes"
+                            isActive={activePage === 'locations-routes'}
+                            onClick={() => handleNavClick('locations-routes')}
                         />
                         <NavItem
                             icon={ICONS.store}

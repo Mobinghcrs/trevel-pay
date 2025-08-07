@@ -1,7 +1,6 @@
-
 import React from 'react';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import QRCode from 'react-qr-code';
 import { FlightOrder } from '../../types';
 import { ICONS } from '../../constants';
@@ -93,7 +92,7 @@ const FlightBookingSuccessPage: React.FC<FlightTicketPageProps> = ({ order, onNe
             return [p.name, p.idOrPassport, seat];
         });
 
-        (doc as any).autoTable({
+        autoTable(doc, {
             startY: 40,
             head: [['Passenger Name', 'ID/Passport', 'Seat']],
             body: tableData,
@@ -104,7 +103,7 @@ const FlightBookingSuccessPage: React.FC<FlightTicketPageProps> = ({ order, onNe
         
         doc.setFontSize(14);
         doc.text("Flight Details", 14, finalY);
-        (doc as any).autoTable({
+        autoTable(doc, {
             startY: finalY + 5,
             body: [
                 ['Airline', order.flight.airline],

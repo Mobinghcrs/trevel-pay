@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { ShoppingCategory, Product, ProductOrder, ShoppingStep, ShippingAddress, VirtualCard, Wallet } from '../../types';
 import { getShoppingCategories, getProductsByCategory, createProductOrder, getVirtualCards, getUserProfile } from '../../services/apiService';
@@ -8,7 +6,7 @@ import ProductCard from './components/ProductCard';
 import Card from '../../components/Card';
 import { ICONS } from '../../constants';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 // --- Sub-components for better structure ---
 
@@ -158,43 +156,40 @@ const CheckoutView: React.FC<{ product: Product; onBack: () => void; onConfirm: 
                             {/* ... address fields ... */}
                              <div>
                                 <label htmlFor="fullName" className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
-                                <input id="fullName" type="text" value={address.fullName} onChange={e => handleAddressChange('fullName', e.target.value)} required className="w-full bg-white border border-slate-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-sky-500" placeholder="Jane Doe" />
+                                <input id="fullName" value={address.fullName} onChange={e => handleAddressChange('fullName', e.target.value)} required className="w-full bg-white border border-slate-300 rounded-md px-3 py-2" />
+                            </div>
+                             <div className="md:col-span-2">
+                                <label htmlFor="streetAddress" className="block text-sm font-medium text-slate-700 mb-1">Street Address</label>
+                                <input id="streetAddress" value={address.streetAddress} onChange={e => handleAddressChange('streetAddress', e.target.value)} required className="w-full bg-white border border-slate-300 rounded-md px-3 py-2" />
+                            </div>
+                             <div>
+                                <label htmlFor="city" className="block text-sm font-medium text-slate-700 mb-1">City</label>
+                                <input id="city" value={address.city} onChange={e => handleAddressChange('city', e.target.value)} required className="w-full bg-white border border-slate-300 rounded-md px-3 py-2" />
                             </div>
                             <div>
-                                <label htmlFor="streetAddress" className="block text-sm font-medium text-slate-700 mb-1">Street Address</label>
-                                <input id="streetAddress" type="text" value={address.streetAddress} onChange={e => handleAddressChange('streetAddress', e.target.value)} required className="w-full bg-white border border-slate-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-sky-500" placeholder="123 SuperApp Street" />
+                                <label htmlFor="postalCode" className="block text-sm font-medium text-slate-700 mb-1">Postal Code</label>
+                                <input id="postalCode" value={address.postalCode} onChange={e => handleAddressChange('postalCode', e.target.value)} required className="w-full bg-white border border-slate-300 rounded-md px-3 py-2" />
+                            </div>
+                             <div className="md:col-span-2">
+                                <label htmlFor="country" className="block text-sm font-medium text-slate-700 mb-1">Country</label>
+                                <input id="country" value={address.country} onChange={e => handleAddressChange('country', e.target.value)} required className="w-full bg-white border border-slate-300 rounded-md px-3 py-2" />
                             </div>
                         </div>
-                        
-                        <div className="md:col-span-2 space-y-4 border-t border-slate-200 pt-6 mt-2">
-                            <h3 className="text-lg font-semibold text-slate-800">Payment Method</h3>
-                             <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)} className="w-full bg-white border border-slate-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-sky-500">
+                        <div className="md:col-span-2 pt-4 mt-4 border-t">
+                             <h3 className="text-lg font-semibold text-slate-800">Payment</h3>
+                              <p className="text-sm text-slate-500 mb-2">Pay with your TRAVEL PAY wallet or a linked virtual card.</p>
+                              <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)} className="w-full bg-white border border-slate-300 rounded-md px-3 py-2">
                                 <option value="default">Default Wallet (USD)</option>
-                                {cards.map(card => (
-                                    <option key={card.id} value={card.id}>
-                                        TRAVEL PAY Card ({card.cardNumber.slice(-4)}) - {card.walletCurrency}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div className="md:col-span-2 space-y-4 border-t border-slate-200 pt-6 mt-2">
-                            <h3 className="text-lg font-semibold text-slate-800">Order Summary</h3>
-                            {/* ... order summary ... */}
-                            <div className="bg-slate-50 p-4 rounded-lg flex items-center gap-4">
-                                <img src={product.imageUrl} alt={product.name} className="h-16 w-16 rounded-md object-cover bg-white"/>
-                                <p className="font-semibold text-slate-800 flex-grow">{product.name}</p>
-                                <p className="font-bold text-lg text-slate-800">${product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                            </div>
+                                {cards.map(card => <option key={card.id} value={card.id}>Card •••• {card.cardNumber.slice(-4)} ({card.walletCurrency})</option>)}
+                              </select>
                         </div>
                     </div>
-
-                    <div className="mt-6 flex flex-col-reverse sm:flex-row sm:justify-between gap-2">
-                        <button type="button" onClick={onBack} className="bg-slate-200 text-slate-700 py-2 px-4 rounded-md font-semibold hover:bg-slate-300 transition-colors">
-                            Back to Details
+                     <div className="flex justify-between items-center pt-6 border-t border-slate-200 mt-6">
+                        <button type="button" onClick={onBack} className="bg-slate-200 text-slate-800 px-6 py-2 rounded-md font-semibold hover:bg-slate-300">
+                          Back
                         </button>
-                        <button type="submit" disabled={isProcessing} className="bg-green-600 text-white py-3 px-6 rounded-md font-semibold hover:bg-green-500 transition-colors disabled:bg-slate-400">
-                            {isProcessing ? 'Processing...' : 'Confirm & Pay'}
+                        <button type="submit" disabled={isProcessing} className="bg-green-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-green-500 disabled:bg-slate-400">
+                          {isProcessing ? 'Processing...' : `Pay $${product.price.toFixed(2)}`}
                         </button>
                     </div>
                 </Card>
@@ -203,9 +198,9 @@ const CheckoutView: React.FC<{ product: Product; onBack: () => void; onConfirm: 
     );
 };
 
-
 const InvoiceView: React.FC<{ order: ProductOrder; onBack: () => void; }> = ({ order, onBack }) => {
-    const handleDownloadPDF = () => {
+    
+    const handleDownload = () => {
         const doc = new jsPDF();
         doc.setFontSize(22);
         doc.text("Purchase Invoice", 14, 22);
@@ -213,80 +208,52 @@ const InvoiceView: React.FC<{ order: ProductOrder; onBack: () => void; }> = ({ o
         doc.text(`Order ID: ${order.id}`, 14, 30);
         doc.text(`Date: ${new Date(order.timestamp).toLocaleString()}`, 14, 36);
 
-        (doc as any).autoTable({
+        autoTable(doc, {
             startY: 45,
-            head: [['Item', 'Description', 'Price']],
-            body: [[order.product.name, order.product.description, `$${order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`]],
-            theme: 'striped',
+            head: [['Item', 'Details']],
+            body: [
+                ['Product', order.product.name],
+                ['Category', order.product.category],
+                ['Price', `$${order.totalPrice.toFixed(2)}`],
+                ['Shipping To', `${order.shippingAddress.fullName}\n${order.shippingAddress.streetAddress}\n${order.shippingAddress.city}, ${order.shippingAddress.postalCode}\n${order.shippingAddress.country}`]
+            ]
         });
         
-        let finalY = (doc as any).lastAutoTable.finalY + 10;
-        
-        doc.setFontSize(14);
-        doc.text("Shipping Address", 14, finalY);
-        const address = order.shippingAddress;
-        const addressText = `${address.fullName}\n${address.streetAddress}\n${address.city}, ${address.postalCode}\n${address.country}`;
-        doc.setFontSize(11);
-        doc.text(addressText, 14, finalY + 7);
-        
-        doc.save(`TravelPay_Invoice_${order.id.slice(-6)}.pdf`);
+        doc.save(`invoice_${order.id}.pdf`);
     };
 
     return (
-        <div className="max-w-2xl mx-auto">
-            <Card className="p-6 md:p-8 bg-white border border-slate-200 shadow-lg">
-                <div className="text-center">
-                    <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
-                        <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                    </div>
-                    <h2 className="text-2xl font-bold text-slate-900">Purchase Successful!</h2>
-                    <p className="text-slate-500 mt-1">Your order has been confirmed and is being processed.</p>
+        <div className="max-w-xl mx-auto">
+             <div className="text-center mb-6">
+                <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+                     <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
                 </div>
-                
-                <div className="my-6 border-t border-slate-200" />
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                <h1 className="text-2xl font-bold text-slate-900">Purchase Complete!</h1>
+                <p className="text-slate-600 mt-2">Your order has been placed successfully.</p>
+            </div>
+             <Card className="p-6 border-slate-200">
+                <div className="flex justify-between items-start">
                     <div>
-                        <h3 className="font-semibold text-slate-800 mb-2">Shipping To:</h3>
-                        <div className="text-slate-600">
-                            <p><strong>{order.shippingAddress.fullName}</strong></p>
-                            <p>{order.shippingAddress.streetAddress}</p>
-                            <p>{order.shippingAddress.city}, {order.shippingAddress.postalCode}</p>
-                            <p>{order.shippingAddress.country}</p>
-                        </div>
+                        <h3 className="font-bold text-lg">{order.product.name}</h3>
+                        <p className="text-sm text-slate-500 font-mono">ID: {order.id}</p>
                     </div>
-                    <div>
-                        <h3 className="font-semibold text-slate-800 mb-2">Order Details:</h3>
-                        <div className="text-slate-600 space-y-1">
-                            <div className="flex justify-between"><span>Order ID:</span> <span className="font-mono">{order.id}</span></div>
-                            <div className="flex justify-between"><span>Date:</span> <span className="font-mono">{new Date(order.timestamp).toLocaleDateString()}</span></div>
-                        </div>
-                    </div>
+                    <p className="font-bold text-xl text-slate-800">${order.totalPrice.toFixed(2)}</p>
                 </div>
-
-                <div className="my-6 border-t border-slate-200" />
-                
-                <h3 className="font-semibold text-slate-800 mb-2">Items Ordered:</h3>
-                <div className="bg-slate-50 p-4 rounded-lg flex items-center gap-4 border border-slate-200">
-                    <img src={order.product.imageUrl} alt={order.product.name} className="h-16 w-16 rounded-md object-cover bg-white"/>
-                    <div className="flex-grow">
-                        <p className="font-semibold text-slate-800">{order.product.name}</p>
-                    </div>
-                    <p className="font-semibold text-slate-800">${order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <div className="my-4 border-t pt-4">
+                    <h4 className="font-semibold text-slate-700 mb-1">Shipping to:</h4>
+                    <address className="not-italic text-sm text-slate-600">
+                        {order.shippingAddress.fullName}<br/>
+                        {order.shippingAddress.streetAddress}<br/>
+                        {order.shippingAddress.city}, {order.shippingAddress.postalCode}<br/>
+                        {order.shippingAddress.country}
+                    </address>
                 </div>
-                
-                 <div className="flex justify-between text-lg font-bold text-slate-900 border-t border-slate-200 pt-4 mt-6">
-                    <span>Total Paid</span>
-                    <span>${order.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                </div>
-
-                <div className="mt-8 flex flex-col sm:flex-row gap-2">
-                    <button onClick={onBack} className="w-full bg-sky-600 text-white py-2 rounded-md font-semibold hover:bg-sky-500 transition-colors">
-                        Continue Shopping
+                <div className="flex flex-col sm:flex-row gap-2">
+                    <button onClick={handleDownload} className="w-full bg-slate-600 text-white py-2 rounded-md font-semibold hover:bg-slate-700 flex items-center justify-center gap-2">
+                        {ICONS.orders} Download Invoice
                     </button>
-                    <button onClick={handleDownloadPDF} className="w-full bg-slate-600 text-white py-2 rounded-md font-semibold hover:bg-slate-700 transition-colors flex items-center justify-center gap-2">
-                        {ICONS.orders}
-                        <span>Download Invoice</span>
+                    <button onClick={onBack} className="w-full bg-sky-600 text-white py-2 rounded-md font-semibold hover:bg-sky-700">
+                        Continue Shopping
                     </button>
                 </div>
             </Card>
@@ -294,9 +261,7 @@ const InvoiceView: React.FC<{ order: ProductOrder; onBack: () => void; }> = ({ o
     );
 };
 
-
-// --- Main Component ---
-
+// --- Main Page Component ---
 interface ShoppingHomePageProps {
     context?: {
         query?: string;
@@ -308,73 +273,63 @@ const ShoppingHomePage: React.FC<ShoppingHomePageProps> = ({ context }) => {
     const [step, setStep] = useState<ShoppingStep>('list');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [finalOrder, setFinalOrder] = useState<ProductOrder | null>(null);
-
+    const [isProcessing, setIsProcessing] = useState(false);
+    
     // Data state
     const [categories, setCategories] = useState<ShoppingCategory[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<ShoppingCategory | null>(null);
+    const [activeCategory, setActiveCategory] = useState<ShoppingCategory | null>(null);
     const [products, setProducts] = useState<Product[]>([]);
+    const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+    const [isLoadingProducts, setIsLoadingProducts] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    
-    const [isLoading, setIsLoading] = useState(true);
-    const [isActionLoading, setIsActionLoading] = useState(false); // For product loading and purchasing
-    const [error, setError] = useState<string | null>(null);
-    
-    const handleSelectCategory = useCallback(async (category: ShoppingCategory) => {
-        setSelectedCategory(category);
-        setSearchTerm('');
-        setIsActionLoading(true);
-        setProducts([]);
-        try {
-            const productData = await getProductsByCategory(category.name);
-            setProducts(productData);
-        } catch (err) {
-             setError(err instanceof Error ? err.message : "Failed to load products.");
-        } finally {
-            setIsActionLoading(false);
-        }
-    }, []);
-    
+
+    // Initial category loading
     useEffect(() => {
         const fetchCategories = async () => {
-            setIsLoading(true);
             try {
                 const data = await getShoppingCategories();
                 setCategories(data);
                 if (data.length > 0) {
-                  handleSelectCategory(data[0]);
+                    setActiveCategory(data[0]);
                 }
-            } catch (err) {
-                setError(err instanceof Error ? err.message : "Failed to load categories.");
-            } finally {
-                setIsLoading(false);
-            }
+            } catch (e) { console.error(e) } 
+            finally { setIsLoadingCategories(false); }
         };
         fetchCategories();
-    }, [handleSelectCategory]);
+    }, []);
 
+    // Product loading when category changes
     useEffect(() => {
-        // Pre-fill search term from context
+        if (!activeCategory) return;
+        const fetchProducts = async () => {
+            setIsLoadingProducts(true);
+            try {
+                const data = await getProductsByCategory(activeCategory.name);
+                setProducts(data);
+            } catch (e) { console.error(e) } 
+            finally { setIsLoadingProducts(false); }
+        };
+        fetchProducts();
+    }, [activeCategory]);
+    
+    // Handle AI context
+    useEffect(() => {
         if (context?.query) {
             setSearchTerm(context.query);
         }
     }, [context]);
 
-    const handleSelectProduct = (product: Product) => {
-        setSelectedProduct(product);
-        setStep('details');
-    };
-
-    const handleConfirmPurchase = async (address: ShippingAddress) => {
+    const handleConfirmOrder = async (address: ShippingAddress) => {
         if (!selectedProduct) return;
-        setIsActionLoading(true);
+        setIsProcessing(true);
         try {
-            const newOrder = await createProductOrder(selectedProduct, address);
-            setFinalOrder(newOrder);
+            const order = await createProductOrder(selectedProduct, address);
+            setFinalOrder(order);
             setStep('invoice');
-        } catch (err) {
-            alert(`Purchase failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+        } catch (e) {
+            alert(`Order failed: ${e instanceof Error ? e.message : 'Unknown error'}`);
         } finally {
-            setIsActionLoading(false);
+            setIsProcessing(false);
         }
     };
     
@@ -382,64 +337,48 @@ const ShoppingHomePage: React.FC<ShoppingHomePageProps> = ({ context }) => {
         setStep('list');
         setSelectedProduct(null);
         setFinalOrder(null);
-        if (selectedCategory) {
-            handleSelectCategory(selectedCategory);
-        }
     };
-    
+
     const renderContent = () => {
-        switch (step) {
+        switch(step) {
             case 'details':
                 return selectedProduct && <ProductDetailView product={selectedProduct} onBack={() => setStep('list')} onProceed={() => setStep('checkout')} />;
             case 'checkout':
-                return selectedProduct && <CheckoutView product={selectedProduct} onBack={() => setStep('details')} onConfirm={handleConfirmPurchase} isProcessing={isActionLoading} />;
+                return selectedProduct && <CheckoutView product={selectedProduct} onBack={() => setStep('details')} onConfirm={handleConfirmOrder} isProcessing={isProcessing} />;
             case 'invoice':
                 return finalOrder && <InvoiceView order={finalOrder} onBack={resetFlow} />;
             case 'list':
             default:
-                return (
-                    selectedCategory && <ProductListView products={products} onSelect={handleSelectProduct} isLoading={isActionLoading} searchTerm={searchTerm} setSearchTerm={setSearchTerm} categoryName={selectedCategory.name} />
-                );
+                return activeCategory ? (
+                    <ProductListView products={products} onSelect={(p) => {setSelectedProduct(p); setStep('details');}} isLoading={isLoadingProducts} searchTerm={searchTerm} setSearchTerm={setSearchTerm} categoryName={activeCategory.name} />
+                ) : <p className="text-center text-slate-500">Select a category to start shopping.</p>;
         }
     };
 
     return (
         <div>
-            <div className="text-center mb-12 md:mb-16">
-                <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight sm:text-5xl">Go Shopping</h1>
-                <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-600">
-                    Browse our products by category or search for what you need.
-                </p>
+            <div className="text-center mb-8">
+                <div className="w-24 h-24 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  {ICONS.store}
+                </div>
+                <h1 className="text-3xl font-bold text-slate-900">Marketplace</h1>
+                <p className="text-slate-600 mt-1">Shop from our curated list of partner stores.</p>
             </div>
-
-            {isLoading && <Spinner message="Loading categories..." />}
-            {error && <div className="text-center text-red-600 bg-red-100 p-4 rounded-md">{error}</div>}
-
-            {!isLoading && categories.length > 0 && (
-                <>
-                    <div className="max-w-4xl mx-auto mb-12">
-                        <div className="flex flex-wrap justify-center gap-x-4 gap-y-8">
-                            {categories.map((cat) => (
-                                <CategoryCircle
-                                    key={cat.id}
-                                    category={cat}
-                                    onClick={() => handleSelectCategory(cat)}
-                                    isActive={selectedCategory?.id === cat.id}
-                                />
+            
+            {/* Category Selector */}
+            {step === 'list' && (
+                <div className="mb-10">
+                    {isLoadingCategories ? <Spinner message="Loading categories..." /> : (
+                        <div className="flex justify-center items-center gap-4 md:gap-8 overflow-x-auto pb-4 -mx-4 px-4">
+                            {categories.map(cat => (
+                                <CategoryCircle key={cat.id} category={cat} onClick={() => setActiveCategory(cat)} isActive={activeCategory?.id === cat.id} />
                             ))}
                         </div>
-                    </div>
-
-                    <div className="border-t border-slate-200 pt-8 mt-8">
-                        {selectedCategory && step === 'list' && (
-                            <h2 className="text-2xl font-bold text-slate-800 mb-6 text-center">
-                                Showing products for: <span className="text-sky-600">{selectedCategory.name}</span>
-                            </h2>
-                        )}
-                        {renderContent()}
-                    </div>
-                </>
+                    )}
+                </div>
             )}
+            
+            {renderContent()}
         </div>
     );
 };

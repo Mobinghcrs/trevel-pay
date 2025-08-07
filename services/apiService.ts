@@ -1,4 +1,3 @@
-
 import {
   Flight,
   Hotel,
@@ -45,6 +44,22 @@ import {
   TaxiOrder,
   ESimPlan,
   ESimOrder,
+  Tour,
+  TourBookingOrder,
+  InvestableAsset,
+  InvestmentOrder,
+  TopUpOrder,
+  Deal,
+  DealOrder,
+  InternetPackage,
+  InternetPackageOrder,
+  GiftCard,
+  GiftCardOrder,
+  Stay,
+  StayBookingOrder,
+  Country,
+  City,
+  Airport,
 } from '../types';
 import * as db from './dummyDataService';
 import * as gemini from './geminiService';
@@ -83,10 +98,14 @@ export const searchFlights = (origin: string, destination: string, date: string)
 export const createFlightBooking = (flight: Flight, passengers: Passenger[], totalPrice: number): Promise<FlightOrder> => {
     try {
         const newOrder = db.createFlightBookingInDb(flight, passengers, totalPrice);
-        return simulateDelay(newOrder, 0.1); // 10% chance of failure
+        return simulateDelay(newOrder);
     } catch (e) {
         return Promise.reject(e);
     }
+};
+
+export const getFlightSearchLocations = (): Promise<{ name: string, code: string }[]> => {
+    return simulateDelay(db.getFlightSearchLocationsFromDb());
 };
 
 // --- Hotel Services ---
@@ -97,7 +116,21 @@ export const searchHotels = (destination: string, checkIn: string, checkOut: str
 export const createHotelBooking = (hotel: Hotel, room: Room, guests: HotelGuest[], checkIn: string, checkOut: string, totalPrice: number): Promise<HotelBookingOrder> => {
     try {
         const newOrder = db.createHotelBookingInDb(hotel, room, guests, checkIn, checkOut, totalPrice);
-        return simulateDelay(newOrder, 0.1);
+        return simulateDelay(newOrder);
+    } catch (e) {
+        return Promise.reject(e);
+    }
+};
+
+// --- Stays Services ---
+export const searchStays = (destination: string, checkIn: string, checkOut: string, guests: number): Promise<Stay[]> => {
+  const data = db.findStaysInDb(destination, checkIn, checkOut, guests);
+  return simulateDelay(data);
+};
+export const createStayBooking = (stay: Stay, guests: HotelGuest[], checkIn: string, checkOut: string, totalPrice: number): Promise<StayBookingOrder> => {
+    try {
+        const newOrder = db.createStayBookingInDb(stay, guests, checkIn, checkOut, totalPrice);
+        return simulateDelay(newOrder);
     } catch (e) {
         return Promise.reject(e);
     }
@@ -111,11 +144,24 @@ export const searchCars = async (location: string, pickupDate: string, dropoffDa
 export const createCarBooking = (car: Car, driver: Driver, pickupDate: string, dropoffDate: string, location: string, totalPrice: number): Promise<CarBooking> => {
   try {
     const newBooking = db.createCarBookingInDb({ car, driver, pickupDate, dropoffDate, location, totalPrice });
-    return simulateDelay(newBooking, 0.1);
+    return simulateDelay(newBooking);
   } catch(e) {
     return Promise.reject(e);
   }
 };
+
+// --- Tours Services ---
+export const searchTours = (destination: string, date: string): Promise<Tour[]> => simulateDelay(db.searchToursInDb(destination, date));
+
+export const createTourBooking = (tour: Tour, bookingDate: string, guests: number, totalPrice: number): Promise<TourBookingOrder> => {
+    try {
+        const newOrder = db.createTourBookingInDb(tour, bookingDate, guests, totalPrice);
+        return simulateDelay(newOrder);
+    } catch (e) {
+        return Promise.reject(e);
+    }
+};
+
 
 // --- Exchange & Market Data ---
 export const getCryptoPrices = (): Promise<CryptoCurrency[]> => simulateDelay(db.getCryptoData());
@@ -146,6 +192,17 @@ export const swapAssets = (from: string, to: string, amount: number): Promise<Us
     }
 };
 
+// --- Investment Services ---
+export const getInvestableAssets = (): Promise<InvestableAsset[]> => simulateDelay(db.getInvestableAssetsFromDb());
+export const createInvestmentOrder = (orderType: 'BUY' | 'SELL', asset: InvestableAsset, amountAsset: number, amountUSD: number, walletCurrency: string): Promise<InvestmentOrder> => {
+    try {
+        const newOrder = db.createInvestmentOrderInDb(orderType, asset, amountAsset, amountUSD, walletCurrency);
+        return simulateDelay(newOrder);
+    } catch (e) {
+        return Promise.reject(e);
+    }
+};
+
 // --- User Profile & Wallets ---
 export const getUserProfile = (): Promise<UserProfile> => simulateDelay(db.getProfile());
 export const updateUserProfile = (data: { name: string; email: string }): Promise<UserProfile> => simulateDelay(db.updateProfileInDb(data));
@@ -168,6 +225,17 @@ export const createProductOrder = (product: Product, shippingAddress: ShippingAd
 
 // --- Promotions ---
 export const getPromoSlides = (): Promise<PromoSlide[]> => simulateDelay(db.getPromoSlidesFromDb());
+
+// --- Deals ---
+export const getDeals = (): Promise<Deal[]> => simulateDelay(db.getDealsFromDb());
+export const createDealOrder = (deal: Deal, details: Pick<HotelGuest, 'fullName' | 'email'> | ShippingAddress): Promise<DealOrder> => {
+    try {
+        return simulateDelay(db.createDealOrderInDb(deal, details));
+    } catch (e) {
+        return Promise.reject(e);
+    }
+};
+
 
 // --- Agents ---
 export const getAgents = (): Promise<Agent[]> => simulateDelay(db.getAgentsFromDb());
@@ -221,6 +289,55 @@ export const purchaseESim = (planId: string): Promise<ESimOrder> => {
     } catch (e) { return Promise.reject(e); }
 };
 
+// --- Top-up / Charge ---
+export const createTopUpOrder = (details: { operator: string, mobileNumber: string, amount: number }): Promise<TopUpOrder> => {
+    try {
+        return simulateDelay(db.createTopUpOrderInDb(details));
+    } catch (e) {
+        return Promise.reject(e);
+    }
+};
+
+export const getInternetPackages = (operator: string): Promise<InternetPackage[]> => {
+    return simulateDelay(db.getInternetPackagesFromDb(operator));
+};
+
+export const createInternetPackageOrder = (details: { operator: string, mobileNumber: string, package: InternetPackage }): Promise<InternetPackageOrder> => {
+    try {
+        return simulateDelay(db.createInternetPackageOrderInDb(details));
+    } catch (e) {
+        return Promise.reject(e);
+    }
+};
+
+// --- Gift Card Services ---
+export const getGiftCardListings = (): Promise<GiftCard[]> => simulateDelay(db.getGiftCardListingsFromDb());
+
+export const createGiftCardOrder = (cardId: string): Promise<GiftCardOrder> => {
+    try {
+        return simulateDelay(db.createGiftCardOrderInDb(cardId));
+    } catch (e) {
+        return Promise.reject(e);
+    }
+};
+
+// --- AGENT-ON-BEHALF-OF-USER SERVICES ---
+export const agentCreateTopUpForUser = (userEmail: string, details: { operator: string, mobileNumber: string, amount: number }): Promise<TopUpOrder> => {
+    try {
+        return simulateDelay(db.agentCreateTopUpForUserInDb(userEmail, details));
+    } catch (e) {
+        return Promise.reject(e);
+    }
+};
+
+export const agentPurchaseESimForUser = (userEmail: string, planId: string): Promise<ESimOrder> => {
+    try {
+        return simulateDelay(db.agentPurchaseESimForUserInDb(userEmail, planId));
+    } catch (e) {
+        return Promise.reject(e);
+    }
+};
+
 
 // --- ADMIN PANEL SERVICES ---
 export const getAdminCashRequests = (): Promise<CashDeliveryRequest[]> => simulateDelay(db.getAdminCashRequestsData());
@@ -261,6 +378,21 @@ export const getAdminVirtualCards = (email: string): Promise<VirtualCard[]> => s
 export const createAdminVirtualCard = (email: string, currency: string): Promise<VirtualCard> => simulateDelay(db.createVirtualCardInDb(currency, email));
 export const updateAdminVirtualCardStatus = (id: string, status: VirtualCard['status']): Promise<VirtualCard> => simulateDelay(db.updateAdminVirtualCardStatusInDb(id, status));
 
+// --- Admin Location Management ---
+export const getAdminCountries = (): Promise<Country[]> => simulateDelay(db.getAdminCountries());
+export const createAdminCountry = (data: Omit<Country, 'id'>): Promise<Country> => simulateDelay(db.createAdminCountryInDb(data));
+export const updateAdminCountry = (id: string, data: Partial<Omit<Country, 'id'>>): Promise<Country> => simulateDelay(db.updateAdminCountryInDb(id, data));
+export const deleteAdminCountry = (id: string): Promise<void> => simulateDelay(db.deleteAdminCountryInDb(id));
+export const getAdminCities = (): Promise<City[]> => simulateDelay(db.getAdminCities());
+export const createAdminCity = (data: Omit<City, 'id'>): Promise<City> => simulateDelay(db.createAdminCityInDb(data));
+export const updateAdminCity = (id: string, data: Partial<Omit<City, 'id'>>): Promise<City> => simulateDelay(db.updateAdminCityInDb(id, data));
+export const deleteAdminCity = (id: string): Promise<void> => simulateDelay(db.deleteAdminCityInDb(id));
+export const getAdminAirports = (): Promise<Airport[]> => simulateDelay(db.getAdminAirports());
+export const createAdminAirport = (data: Omit<Airport, 'id'>): Promise<Airport> => simulateDelay(db.createAdminAirportInDb(data));
+export const updateAdminAirport = (id: string, data: Partial<Omit<Airport, 'id'>>): Promise<Airport> => simulateDelay(db.updateAdminAirportInDb(id, data));
+export const deleteAdminAirport = (id: string): Promise<void> => simulateDelay(db.deleteAdminAirportInDb(id));
+
+
 // --- Admin Finance ---
 export const getFinancialSummary = (): Promise<FinancialSummary> => simulateDelay(db.getFinancialSummaryFromDb());
 export const getJournalEntries = (): Promise<JournalEntry[]> => simulateDelay(db.getJournalEntriesFromDb());
@@ -271,3 +403,4 @@ export const getChartOfAccounts = (): Promise<FinancialAccount[]> => simulateDel
 // --- Gemini AI Services ---
 export const getIntentFromQuery = (query: string): Promise<AiIntent> => gemini.getIntentFromQuery(query);
 export const getAiMarketAnalysisStream = (query: string): AsyncGenerator<string> => gemini.generateMarketAnalysisStream(query);
+export const generateAssetSummary = (assetName: string): Promise<string> => gemini.generateAssetSummary(assetName);

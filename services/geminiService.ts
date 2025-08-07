@@ -105,3 +105,28 @@ export async function getIntentFromQuery(query: string): Promise<AiIntent> {
         throw new Error("Sorry, I couldn't understand that. Please try rephrasing your request.");
     }
 }
+
+/**
+ * Generates a simple, beginner-friendly summary of a crypto asset.
+ * @param assetName The name of the asset (e.g., "Bitcoin").
+ * @returns A string containing the summary.
+ */
+export async function generateAssetSummary(assetName: string): Promise<string> {
+    const systemInstruction = `You are a helpful assistant for TRAVEL PAY. Your goal is to explain complex financial topics in a simple, concise, and neutral way for beginners. Do not give financial advice.`;
+    const prompt = `Provide a brief, beginner-friendly summary of what ${assetName} is and its primary purpose. Keep it under 100 words.`;
+    
+    try {
+        const response: GenerateContentResponse = await ai.models.generateContent({
+            model,
+            contents: prompt,
+            config: {
+                systemInstruction,
+                temperature: 0.2,
+            },
+        });
+        return response.text;
+    } catch (error) {
+        console.error("Error generating asset summary from Gemini:", error);
+        throw new Error(`Could not generate a summary for ${assetName}.`);
+    }
+}

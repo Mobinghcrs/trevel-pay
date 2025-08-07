@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import { AgentTransaction } from '../../types';
 import { getAgentTransactionHistory } from '../../services/apiService';
 import Spinner from '../../components/Spinner';
@@ -63,7 +63,7 @@ const AgentReportsPage: React.FC = () => {
 
     const handleExportPDF = () => {
         const doc = new jsPDF();
-        (doc as any).autoTable({
+        autoTable(doc, {
             head: [['Date', 'User Email', 'Amount', 'Commission']],
             body: transactions.map(tx => [
                 new Date(tx.timestamp).toLocaleString(),

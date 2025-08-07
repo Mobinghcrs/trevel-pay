@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ESimOrder } from '../../types';
 import Card from '../../components/Card';
@@ -11,7 +10,7 @@ const ESimOrderCard: React.FC<{ order: ESimOrder }> = ({ order }) => {
 
     return (
         <>
-            <Card className="border-slate-200">
+            <Card className="border-slate-200 p-0 overflow-hidden">
                 <div className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
                     <div className="flex-shrink-0">
                         <div className="p-3 rounded-full bg-slate-100 text-teal-600">
@@ -46,6 +45,11 @@ const ESimOrderCard: React.FC<{ order: ESimOrder }> = ({ order }) => {
                         </div>
                     </div>
                 </div>
+                 {order.purchasedByAgentInfo && (
+                    <div className="px-4 py-1 bg-slate-100 text-xs text-slate-600 border-t text-center sm:text-left">
+                        Purchased via Agent: <strong>{order.purchasedByAgentInfo.agentName}</strong>
+                    </div>
+                )}
             </Card>
 
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="eSIM Order Details">

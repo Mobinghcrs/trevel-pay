@@ -11,7 +11,7 @@ interface CreateCardModalProps {
 }
 
 const CreateCardModal: React.FC<CreateCardModalProps> = ({ isOpen, onClose, onSuccess }) => {
-    const [fiatWallets, setFiatWallets] = useState<Wallet[]>([]);
+    const [linkableWallets, setLinkableWallets] = useState<Wallet[]>([]);
     const [selectedWallet, setSelectedWallet] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isCreating, setIsCreating] = useState(false);
@@ -25,10 +25,10 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({ isOpen, onClose, onSu
             setError(null);
             try {
                 const profile = await getUserProfile();
-                const userFiatWallets = profile.wallets.filter(w => w.type === 'Fiat');
-                setFiatWallets(userFiatWallets);
-                if (userFiatWallets.length > 0) {
-                    setSelectedWallet(userFiatWallets[0].currency);
+                const userLinkableWallets = profile.wallets.filter(w => w.type === 'Fiat' || w.type === 'Crypto');
+                setLinkableWallets(userLinkableWallets);
+                if (userLinkableWallets.length > 0) {
+                    setSelectedWallet(userLinkableWallets[0].currency);
                 }
             } catch (e) {
                 setError(e instanceof Error ? e.message : "Failed to load wallets.");
@@ -57,15 +57,18 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({ isOpen, onClose, onSu
         }
     };
 
+    const fiatWallets = linkableWallets.filter(w => w.type === 'Fiat');
+    const cryptoWallets = linkableWallets.filter(w => w.type === 'Crypto');
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} title="Create New Virtual Card">
             {isLoading ? <Spinner message="Loading wallets..." /> : (
                 <div className="space-y-4">
                     <p className="text-gray-600">
-                        Create a new TRAVEL PAY virtual card. This card will be linked to one of your fiat currency wallets and can be used for payments within the app.
+                        Create a new TRAVEL PAY virtual card. This card will be linked to one of your currency wallets and can be used for payments.
                     </p>
                     
-                    {fiatWallets.length > 0 ? (
+                    {linkableWallets.length > 0 ? (
                         <div>
                             <label htmlFor="wallet-select" className="block text-sm font-medium text-gray-700 mb-1">
                                 Link card to wallet:
@@ -76,16 +79,29 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({ isOpen, onClose, onSu
                                 onChange={(e) => setSelectedWallet(e.target.value)}
                                 className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:ring-2 focus:ring-teal-500 focus:outline-none"
                             >
-                                {fiatWallets.map(w => (
-                                    <option key={w.currency} value={w.currency}>
-                                        {w.name} ({w.balance.toFixed(2)} {w.currency})
-                                    </option>
-                                ))}
+                                {fiatWallets.length > 0 && (
+                                    <optgroup label="Physical Currencies">
+                                        {fiatWallets.map(w => (
+                                            <option key={w.currency} value={w.currency}>
+                                                {w.name} ({w.balance.toFixed(2)} {w.currency})
+                                            </option>
+                                        ))}
+                                    </optgroup>
+                                )}
+                                 {cryptoWallets.length > 0 && (
+                                    <optgroup label="Digital Currencies">
+                                        {cryptoWallets.map(w => (
+                                            <option key={w.currency} value={w.currency}>
+                                                {w.name} ({w.balance.toFixed(6)} {w.currency})
+                                            </option>
+                                        ))}
+                                    </optgroup>
+                                )}
                             </select>
                         </div>
                     ) : (
                         <p className="text-center text-amber-700 bg-amber-100 p-3 rounded-md">
-                            You need a Fiat wallet (e.g., USD, EUR) to create a virtual card. Please add one in your profile.
+                            You need a Fiat or Crypto wallet to create a virtual card. Please add one in your profile.
                         </p>
                     )}
                     
@@ -97,7 +113,7 @@ const CreateCardModal: React.FC<CreateCardModalProps> = ({ isOpen, onClose, onSu
                         </button>
                         <button 
                             onClick={handleCreate} 
-                            disabled={isCreating || fiatWallets.length === 0}
+                            disabled={isCreating || linkableWallets.length === 0}
                             className="bg-teal-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-teal-700 transition-colors disabled:bg-gray-400"
                         >
                             {isCreating ? 'Creating...' : 'Create Card'}

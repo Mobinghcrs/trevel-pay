@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 
 // Using a more modern, consistent, and visually appealing icon set.
@@ -151,7 +152,7 @@ export const ICONS = {
   ),
   store: (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.658-.463 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.658-.463 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 017.5 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 017.5 0z" />
     </svg>
   ),
    // --- New Shopping Category Icons ---
@@ -222,6 +223,16 @@ export const ICONS = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.5 4.5L21.75 6M21.75 6v4.5M21.75 6h-4.5" />
     </svg>
   ),
+  fire: (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.25.75a.75.75 0 01.75.75v.518c.288.08.567.195.832.333a.75.75 0 01-.333 1.353c-.31-.154-.647-.27-.999-.345V12a2.25 2.25 0 01-2.25 2.25h-1.5a2.25 2.25 0 01-2.25-2.25V4.353c-.352.074-.69.19-1,.345a.75.75 0 01-.333-1.353c.265-.138.544-.253.832-.333V1.5a.75.75 0 011.5 0v.001c.969-.034 2.25.215 2.25 1.149 0 .934-1.281 1.183-2.25 1.149V8.25a.75.75 0 00-.75-.75h-1.5a.75.75 0 00-.75.75v2.25C8.625 11.83 6 12.64 6 15.75c0 2.25 2.25 3.75 4.5 3.75h1.5c2.25 0 4.5-1.5 4.5-3.75 0-3.11-2.625-3.92-3.75-4.5V3.363c1.072.16 2.25.56 2.25 1.763 0 1.203-1.448 1.637-2.25 1.482V.75a.75.75 0 01.75-.75z" />
+    </svg>
+  ),
+  charge: (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+    </svg>
+  ),
   buildingStorefront: (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.25m11.25 0h8.25M13.5 21h-3.375a.75.75 0 01-.75-.75V13.5m0 0a3 3 0 00-3-3H2.25m8.25 4.5H5.25m5.25 0h2.25m0 0V21m0 0h-2.25m2.25 0h2.25M9 13.5m-3 0a3 3 0 106 0 3 3 0 00-6 0z" />
@@ -230,6 +241,12 @@ export const ICONS = {
   userPlus: (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+    </svg>
+  ),
+  giftCard: (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6z" />
     </svg>
   ),
   mapPin: (
@@ -241,6 +258,11 @@ export const ICONS = {
   flag: (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6H8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+    </svg>
+  ),
+  globe: (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9V3m0 18a9 9 0 00-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
     </svg>
   ),
   // BI Dashboard Icons

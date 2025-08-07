@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { AdminUser, Wallet, VirtualCard } from '../../types';
 import { ICONS, COMMON_CRYPTO_CURRENCIES, COMMON_FIAT_CURRENCIES } from '../../constants';
@@ -267,32 +267,67 @@ const AddWalletFormAdmin: React.FC<{userId: string; onUserUpdate: () => void; on
     )
 }
 
-const AdminVirtualCardDisplay: React.FC<{ cardHolderName: string, currency: string }> = ({ cardHolderName, currency }) => (
-    <div className="w-full h-48 rounded-xl shadow-lg relative flex flex-col justify-between p-5 text-white flex-shrink-0 bg-gradient-to-br from-gray-800 to-black overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(#ffffff22_1px,transparent_1px)] [background-size:16px_16px] opacity-50"></div>
-        <div className="absolute inset-0 bg-black/10 rounded-xl"></div>
-        
-        <div className="flex justify-between items-start z-10">
-            <span className="font-bold text-lg">TRAVEL PAY</span>
-            <span className="font-bold text-lg">{currency}</span>
-        </div>
+const getCurrencySymbol = (currency: string): string => {
+    const symbols: { [key: string]: string } = {
+        'USD': '$', 'EUR': '€', 'GBP': '£', 'JPY': '¥', 'BTC': 'Ƀ', 'ETH': 'Ξ', 'USDT': '₮'
+    };
+    return symbols[currency] || currency;
+}
 
-        <div className="z-10">
-            <p className="font-mono text-xl tracking-wider">5558 88XX XXXX XXXX</p>
-        </div>
+const AdminVirtualCardDisplay: React.FC<{ cardHolderName: string, currency: string }> = ({ cardHolderName, currency }) => {
+    const isCrypto = useMemo(() => ['BTC', 'ETH', 'USDT', 'SOL', 'XRP'].includes(currency), [currency]);
 
-        <div className="flex justify-between items-end z-10 text-sm">
-            <div>
-                <p className="text-xs opacity-80">Card Holder</p>
-                <p className="font-semibold uppercase">{cardHolderName}</p>
-            </div>
-            <div>
-                <p className="text-xs opacity-80">Expires</p>
-                <p className="font-mono">MM/YY</p>
+    const auroraClasses = isCrypto 
+        ? { one: 'bg-rose-500', two: 'bg-fuchsia-500', three: 'bg-indigo-500' }
+        : { one: 'bg-teal-400', two: 'bg-sky-400', three: 'bg-emerald-400' };
+
+    return (
+        <div className="relative w-full h-48 rounded-2xl overflow-hidden">
+            {/* Background Blobs */}
+            <div className={`absolute top-0 -left-1/2 w-64 h-64 ${auroraClasses.one} rounded-full mix-blend-screen filter blur-2xl opacity-50 animate-blob`}></div>
+            <div className={`absolute top-0 -right-1/2 w-64 h-64 ${auroraClasses.two} rounded-full mix-blend-screen filter blur-2xl opacity-50 animate-blob animation-delay-2000`}></div>
+            <div className={`absolute -bottom-1/2 left-1/4 w-64 h-64 ${auroraClasses.three} rounded-full mix-blend-screen filter blur-2xl opacity-50 animate-blob animation-delay-4000`}></div>
+            
+            {/* Glassmorphic Card */}
+            <div className="absolute inset-0 bg-black/20 backdrop-blur-xl rounded-2xl border border-white/20 p-5 flex flex-col justify-between text-white">
+                {/* Top Row: Chip & Brand */}
+                <div className="flex justify-between items-start z-10">
+                    <div className="w-12 h-8 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-md border border-yellow-600/50 relative overflow-hidden">
+                        <div className="w-8 h-6 bg-gradient-to-br from-yellow-200 to-yellow-400 rounded-sm absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-l border-t border-yellow-200/50"></div>
+                    </div>
+                    <span className="font-bold text-lg text-white/90 drop-shadow-md pt-1">TRAVEL PAY</span>
+                </div>
+
+                {/* Card Number */}
+                <div className="z-10 text-white text-left">
+                    <p className="font-mono text-xl tracking-wider drop-shadow-md">5558 88XX XXXX XXXX</p>
+                </div>
+
+                {/* Bottom Row */}
+                <div className="flex justify-between items-end z-10 text-sm text-white/90">
+                    <div>
+                        <p className="text-xs opacity-80">Card Holder</p>
+                        <p className="font-semibold uppercase drop-shadow-sm">{cardHolderName}</p>
+                    </div>
+                    <div className="flex items-end gap-4">
+                         <div className="text-right">
+                            <p className="text-xs opacity-80">Expires</p>
+                            <p className="font-mono drop-shadow-sm">MM/YY</p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                             <span className="text-2xl font-bold text-white/80 drop-shadow-md -mb-1">{getCurrencySymbol(currency)}</span>
+                             <svg width="24" height="24" viewBox="0 0 24 24" className="w-8 h-8 text-white/80 transform rotate-90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.5 14.5C9.98528 16.9853 14.0147 16.9853 16.5 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                <path d="M10.5 11.5C11.4706 12.4706 12.5294 12.4706 13.5 11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                <path d="M4.5 17.5C8.64214 21.6421 15.3579 21.6421 19.5 17.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 
 const CardManager: React.FC<{ user: AdminUser }> = ({ user }) => {
@@ -300,7 +335,8 @@ const CardManager: React.FC<{ user: AdminUser }> = ({ user }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isIssuing, setIsIssuing] = useState(false);
     const [selectedWallet, setSelectedWallet] = useState<string>('');
-    const fiatWallets = user.wallets.filter(w => w.type === 'Fiat');
+    
+    const linkableWallets = user.wallets.filter(w => w.type === 'Fiat' || w.type === 'Crypto');
 
     const fetchCards = useCallback(async () => {
         try {
@@ -315,10 +351,10 @@ const CardManager: React.FC<{ user: AdminUser }> = ({ user }) => {
     
     useEffect(() => {
         fetchCards();
-        if (fiatWallets.length > 0 && !selectedWallet) {
-            setSelectedWallet(fiatWallets[0].currency);
+        if (linkableWallets.length > 0 && !selectedWallet) {
+            setSelectedWallet(linkableWallets[0].currency);
         }
-    }, [user.email, fiatWallets, selectedWallet, fetchCards]);
+    }, [user.email, linkableWallets, selectedWallet, fetchCards]);
 
     const handleIssueCard = async () => {
         if (!selectedWallet) {
@@ -353,18 +389,18 @@ const CardManager: React.FC<{ user: AdminUser }> = ({ user }) => {
             <h2 className="text-2xl font-bold text-slate-900 mb-4">Virtual Cards</h2>
             <div className="bg-slate-50 p-4 rounded-lg mb-6 border border-slate-200">
                 <h3 className="font-bold mb-2 text-slate-800">Issue New Card for {user.name}</h3>
-                {fiatWallets.length > 0 ? (
+                {linkableWallets.length > 0 ? (
                     <div className="grid grid-cols-2 gap-4 items-center">
                         <AdminVirtualCardDisplay cardHolderName={user.name} currency={selectedWallet} />
                         <div className="space-y-3">
                              <select value={selectedWallet} onChange={e => setSelectedWallet(e.target.value)} className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                                {fiatWallets.map(w => <option key={w.currency} value={w.currency}>{w.name} ({w.currency})</option>)}
+                                {linkableWallets.map(w => <option key={w.currency} value={w.currency}>{w.name} ({w.currency})</option>)}
                             </select>
                             <button onClick={handleIssueCard} disabled={isIssuing} className="w-full bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-md font-semibold disabled:bg-slate-400">{isIssuing ? 'Issuing...' : 'Issue Card'}</button>
                         </div>
                     </div>
                 ) : (
-                    <p className="text-sm text-slate-600">This user needs a Fiat wallet before a card can be issued.</p>
+                    <p className="text-sm text-slate-600">This user needs a Fiat or Crypto wallet before a card can be issued.</p>
                 )}
             </div>
             

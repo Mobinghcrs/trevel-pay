@@ -1,14 +1,13 @@
-
-
-
 import React from 'react';
 
-export type Page = 'login' | 'home' | 'flights' | 'exchange' | 'profile' | 'orders' | 'notifications' | 'hotel' | 'car-rental' | 'shopping' | 'agents' | 'agent-transfer' | 'cards' | 'agent-reports' | 'merchant-pos' | 'user-transfer' | 'taxi' | 'sim';
+export type Page = 'login' | 'home' | 'flights' | 'exchange' | 'profile' | 'orders' | 'notifications' | 'hotel' | 'car-rental' | 'shopping' | 'agents' | 'agent-transfer' | 'cards' | 'agent-reports' | 'merchant-pos' | 'user-transfer' | 'taxi' | 'sim' | 'tour' | 'investment' | 'charge' | 'deals' | 'deal-booking' | 'gift-cards' | 'stays';
 export type ExchangeTab = 'rates' | 'p2p' | 'bank' | 'delivery' | 'swap' | 'ai-analyst';
 export type FlightBookingStep = 'search' | 'passengers' | 'confirmation' | 'ticket';
 export type HotelBookingStep = 'search' | 'guests' | 'confirmation' | 'success';
 export type CarBookingStep = 'search' | 'details' | 'driver' | 'confirmation' | 'success';
-export type AdminPage = 'dashboard' | 'forex-requests' | 'flight-management' | 'user-management' | 'revenue-models' | 'store-management' | 'promotions' | 'agent-management' | 'roles-permissions' | 'finance';
+export type TourBookingStep = 'list' | 'details' | 'confirmation' | 'success';
+export type StayBookingStep = 'search' | 'details' | 'guests' | 'confirmation' | 'success';
+export type AdminPage = 'dashboard' | 'forex-requests' | 'flight-management' | 'user-management' | 'revenue-models' | 'store-management' | 'promotions' | 'agent-management' | 'roles-permissions' | 'finance' | 'locations-routes';
 export type P2PCurrencyType = 'digital' | 'physical';
 export type P2PTradeStep = 'selection' | 'list' | 'trade';
 export type P2PTransactionType = 'BUY' | 'SELL';
@@ -80,6 +79,19 @@ export interface Hotel {
   imageUrl: string;
   rooms: Room[];
 }
+
+export interface Stay {
+  id: string;
+  name: string;
+  type: 'Villa' | 'Apartment' | 'Cottage';
+  location: string;
+  rating: number;
+  description: string;
+  amenities: string[];
+  pricePerNight: number;
+  images: string[];
+}
+
 
 export interface Car {
   id:string;
@@ -184,6 +196,23 @@ export interface Wallet {
   name?: string;
 }
 
+// --- Investment Types ---
+export interface InvestableAsset {
+    symbol: string;
+    name: string;
+    price: number;
+    change24h: number; // percentage
+    marketCap: number;
+    volume24h: number;
+    history: { time: number; open: number; high: number; low: number; close: number }[];
+}
+
+export interface Investment {
+    assetSymbol: string;
+    amount: number;
+    avgCostBasis: number; // Average price paid per unit
+}
+
 export interface UserProfile {
   userId: string;
   name: string;
@@ -191,6 +220,7 @@ export interface UserProfile {
   memberSince: string;
   avatarUrl: string;
   wallets: Wallet[];
+  investments: Investment[];
 }
 
 export interface AdminUser extends UserProfile {
@@ -305,6 +335,17 @@ export interface HotelBookingOrder {
     totalPrice: number;
 }
 
+export interface StayBookingOrder {
+    type: 'stay';
+    id: string;
+    timestamp: string;
+    stay: Stay;
+    guests: HotelGuest[];
+    checkInDate: string;
+    checkOutDate: string;
+    totalPrice: number;
+}
+
 export interface UserTransferOrder {
     type: 'user-transfer';
     id: string;
@@ -362,9 +403,119 @@ export interface ESimOrder {
     timestamp: string;
     plan: ESimPlan;
     qrCodeValue: string; // This will be a stringified JSON for the QR code
+    purchasedByAgentInfo?: { agentId: string; agentName: string; };
 }
 
-export type Order = P2POrder | ProductOrder | BankTransferOrder | FlightOrder | HotelBookingOrder | UserTransferOrder | TaxiOrder | ESimOrder;
+// --- Tour Types ---
+export interface Tour {
+    id: string;
+    name: string;
+    destination: string;
+    description: string;
+    pricePerPerson: number;
+    duration: string;
+    rating: number;
+    images: string[];
+    itinerary: { time: string; activity: string; }[];
+    inclusions: string[];
+    exclusions: string[];
+}
+
+export interface TourBookingOrder {
+    type: 'tour';
+    id: string;
+    timestamp: string;
+    tour: Tour;
+    bookingDate: string;
+    guests: number;
+    totalPrice: number;
+}
+
+export interface InvestmentOrder {
+    type: 'investment';
+    id: string;
+    timestamp: string;
+    asset: InvestableAsset;
+    orderType: 'BUY' | 'SELL';
+    amountAsset: number; // amount of the crypto asset
+    amountUSD: number; // total value in USD
+    pricePerUnit: number;
+    fee: number;
+}
+
+export interface TopUpOrder {
+    type: 'top-up';
+    id: string;
+    timestamp: string;
+    operator: string;
+    mobileNumber: string;
+    amount: number;
+    currency: 'IRR';
+    purchasedByAgentInfo?: { agentId: string; agentName: string; };
+}
+
+export interface InternetPackage {
+    id: string;
+    operator: string;
+    dataAmountGB: number;
+    validityDays: number;
+    priceIRR: number;
+    description: string;
+}
+
+export interface InternetPackageOrder {
+    type: 'internet-package';
+    id: string;
+    timestamp: string;
+    operator: string;
+    mobileNumber: string;
+    package: InternetPackage;
+}
+
+
+export interface Deal {
+    id: string;
+    title: string;
+    category: 'hotel' | 'tour' | 'product'; // The page it belongs to
+    imageUrl: string;
+    originalPrice: number;
+    discountPercentage: number;
+    relatedItemId: string; // The ID of the Hotel, Tour, or Product
+    validUntil: string; // ISO date string
+    totalAvailable: number;
+    soldCount: number;
+}
+
+export interface DealOrder {
+    type: 'deal';
+    id: string;
+    timestamp: string;
+    deal: Deal;
+    totalPrice: number;
+    // For hotel/tour, use a simplified guest info. For product, use shipping address.
+    details: Pick<HotelGuest, 'fullName' | 'email'> | ShippingAddress; 
+}
+
+export interface GiftCard {
+    id: string;
+    brand: string;
+    logoUrl: string;
+    balance: number;
+    price: number;
+    sellerName: string;
+    sellerRating: number;
+}
+
+export interface GiftCardOrder {
+    type: 'gift-card';
+    id: string;
+    timestamp: string;
+    giftCard: GiftCard;
+    pricePaid: number;
+}
+
+
+export type Order = P2POrder | ProductOrder | BankTransferOrder | FlightOrder | HotelBookingOrder | UserTransferOrder | TaxiOrder | ESimOrder | TourBookingOrder | InvestmentOrder | TopUpOrder | DealOrder | InternetPackageOrder | GiftCardOrder | StayBookingOrder;
 
 
 // --- Analytics Types ---
@@ -422,7 +573,7 @@ export interface Agent {
 export interface AgentTransaction {
   id: string;
   timestamp: string;
-  type: 'User Credit';
+  type: 'User Credit' | 'User Top-up' | 'User eSIM Purchase';
   userEmail: string;
   amount: number;
   currency: string;
@@ -505,4 +656,24 @@ export interface PaymentRequest {
     amount: number;
     currency: string;
     status: 'Pending' | 'Completed';
+}
+
+// --- Location Management Types ---
+export interface Country {
+  id: string;
+  name: string;
+  code: string; // e.g., US, FR, IR
+}
+
+export interface City {
+  id: string;
+  name: string;
+  countryId: string;
+}
+
+export interface Airport {
+  id: string;
+  name: string;
+  iataCode: string;
+  cityId: string;
 }

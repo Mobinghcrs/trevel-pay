@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { VirtualCard } from '../../types';
-import { getVirtualCards } from '../../services/apiService';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { VirtualCard, UserProfile } from '../../types';
+import { getVirtualCards, getUserProfile } from '../../services/apiService';
 import Spinner from '../../components/Spinner';
 import Card from '../../components/Card';
 import { ICONS } from '../../constants';
@@ -9,35 +9,51 @@ import CreateCardModal from './CreateCardModal';
 
 const CardsPage: React.FC = () => {
     const [cards, setCards] = useState<VirtualCard[]>([]);
+    const [profile, setProfile] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     
-    const fetchCards = useCallback(async () => {
+    const fetchData = useCallback(async () => {
         setIsLoading(true);
         setError(null);
         try {
-            const data = await getVirtualCards();
-            setCards(data);
+            const [cardData, profileData] = await Promise.all([
+                getVirtualCards(),
+                getUserProfile()
+            ]);
+            setCards(cardData);
+            setProfile(profileData);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to load cards.");
+            setError(err instanceof Error ? err.message : "Failed to load card data.");
         } finally {
             setIsLoading(false);
         }
     }, []);
 
     useEffect(() => {
-        fetchCards();
-    }, [fetchCards]);
+        fetchData();
+    }, [fetchData]);
 
     const handleCardCreated = () => {
-        fetchCards();
+        fetchData();
         setIsCreateModalOpen(false);
     };
 
     const handleCardUpdated = () => {
-        fetchCards();
+        fetchData();
     };
+
+    const { physicalCards, digitalCards } = useMemo(() => {
+        if (!profile) return { physicalCards: [], digitalCards: [] };
+        
+        const walletTypeMap = new Map(profile.wallets.map(w => [w.currency, w.type]));
+        
+        const physical = cards.filter(c => walletTypeMap.get(c.walletCurrency) === 'Fiat');
+        const digital = cards.filter(c => walletTypeMap.get(c.walletCurrency) === 'Crypto');
+
+        return { physicalCards: physical, digitalCards: digital };
+    }, [cards, profile]);
 
     return (
         <>
@@ -65,12 +81,36 @@ const CardsPage: React.FC = () => {
                         <p className="text-gray-500 mt-2">Click "Create Card" to get started.</p>
                     </Card>
                 )}
+                
+                 {!isLoading && !error && cards.length > 0 && (
+                    <div className="space-y-10">
+                        {/* Physical Currency Cards */}
+                        <div>
+                            <h2 className="text-xl font-bold text-slate-800 mb-4">Physical Currency Cards</h2>
+                            {physicalCards.length > 0 ? (
+                                <div className="space-y-6">
+                                    {physicalCards.map(card => (
+                                        <VirtualCardDisplay key={card.id} card={card} onUpdate={handleCardUpdated} />
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-slate-500">No cards linked to physical currencies (e.g., USD, EUR).</p>
+                            )}
+                        </div>
 
-                {!isLoading && cards.length > 0 && (
-                    <div className="space-y-6">
-                        {cards.map(card => (
-                            <VirtualCardDisplay key={card.id} card={card} onUpdate={handleCardUpdated} />
-                        ))}
+                        {/* Digital Currency Cards */}
+                        <div>
+                            <h2 className="text-xl font-bold text-slate-800 mb-4">Digital Currency Cards</h2>
+                             {digitalCards.length > 0 ? (
+                                <div className="space-y-6">
+                                    {digitalCards.map(card => (
+                                        <VirtualCardDisplay key={card.id} card={card} onUpdate={handleCardUpdated} />
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-slate-500">No cards linked to digital currencies (e.g., BTC, ETH).</p>
+                            )}
+                        </div>
                     </div>
                 )}
             </div>

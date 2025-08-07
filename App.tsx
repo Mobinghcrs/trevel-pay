@@ -29,6 +29,13 @@ import MerchantPosPage from './features/merchant/MerchantPosPage';
 import UserTransferPage from './features/transfers/UserTransferPage';
 import TaxiPage from './features/taxi/TaxiPage';
 import SimPage from './features/sim/SimPage';
+import ToursPage from './features/tours/ToursPage';
+import InvestmentPage from './features/investment/InvestmentPage';
+import ChargePage from './features/charge/ChargePage';
+import DealsPage from './features/deals/DealsPage';
+import DealBookingPage from './features/deals/DealBookingPage';
+import GiftCardsPage from './features/gift-cards/GiftCardsPage';
+import StaysSearchPage from './features/stays/StaysSearchPage';
 
 export default function App(): React.ReactNode {
   const [auth, setAuth] = useState<AuthState>({ isLoggedIn: false, user: { name: 'Guest', role: 'guest', userId: '@guest' } });
@@ -58,7 +65,7 @@ export default function App(): React.ReactNode {
   
   // Simulate polling for payment requests for the logged-in user
   useEffect(() => {
-    let interval: number;
+    let interval: any;
     if (auth.isLoggedIn && auth.user?.role === 'user' && auth.user.email) {
       interval = setInterval(async () => {
         // Only check for new requests if one isn't already active
@@ -100,6 +107,8 @@ export default function App(): React.ReactNode {
         return <FlightSearchPage context={pageContext} />;
       case 'hotel':
         return <HotelSearchPage context={pageContext} />;
+      case 'stays':
+        return <StaysSearchPage context={pageContext} />;
       case 'car-rental':
         return <CarRentalPage context={pageContext} />;
       case 'shopping':
@@ -128,6 +137,18 @@ export default function App(): React.ReactNode {
         return <TaxiPage context={pageContext} />;
       case 'sim':
         return <SimPage />;
+      case 'tour':
+        return <ToursPage />;
+      case 'investment':
+        return <InvestmentPage />;
+      case 'charge':
+        return <ChargePage />;
+      case 'deals':
+        return <DealsPage />;
+      case 'deal-booking':
+        return <DealBookingPage context={pageContext} />;
+      case 'gift-cards':
+        return <GiftCardsPage />;
       default:
         return <HomePage user={auth.user} />;
     }

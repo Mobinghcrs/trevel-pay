@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { AdminPage } from '../types';
 import Sidebar from './Sidebar';
@@ -13,6 +14,7 @@ import AgentManagementPage from './AgentManagementPage';
 import RolesPermissionsPage from './RolesPermissionsPage';
 import FinancePage from './FinancePage';
 import Header from './Header';
+import LocationsAdminPage from './LocationsAdminPage';
 
 const AdminPanel: React.FC = () => {
     const [page, setPage] = useState<AdminPage>('dashboard');
@@ -26,6 +28,8 @@ const AdminPanel: React.FC = () => {
                 return <CashRequestsAdminPage />;
             case 'flight-management':
                 return <FlightManagementPage />
+            case 'locations-routes':
+                return <LocationsAdminPage />;
             case 'user-management':
                 return <UserManagementPage />;
             case 'store-management':

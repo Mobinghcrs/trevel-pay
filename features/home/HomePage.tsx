@@ -1,6 +1,4 @@
 
-
-
 import React, { useState, useEffect } from 'react';
 import { ICONS } from '../../constants';
 import { useNavigation } from '../../contexts/NavigationContext';
@@ -217,20 +215,22 @@ const UserDashboard: React.FC<{ user: AuthState['user'] }> = ({ user }) => {
     loadProfile();
   }, [isGuest]);
   
-  const comingSoonAlert = (featureName: string) => () => alert(`${featureName} service is coming soon!`);
-
-  const features = [
+  const features: { title: string; icon: React.ReactNode; action: () => void; comingSoon?: boolean; }[] = [
     { title: 'Flights', icon: ICONS.plane, action: () => navigate('flights') },
+    { title: 'Hotels', icon: ICONS.hotel, action: () => navigate('hotel') },
+    { title: 'Hot Deals', icon: ICONS.fire, action: () => navigate('deals') },
     { title: 'Exchange', icon: ICONS.exchange, action: () => navigate('exchange') },
     { title: 'Send Money', icon: ICONS.userArrows, action: () => navigate('user-transfer') },
-    { title: 'Hotels', icon: ICONS.hotel, action: () => navigate('hotel') },
+    { title: 'Charge', icon: ICONS.charge, action: () => navigate('charge') },
+    { title: 'Investment', icon: ICONS.investment, action: () => navigate('investment') },
+    { title: 'Gift Cards', icon: ICONS.giftCard, action: () => navigate('gift-cards') },
     { title: 'Car Rental', icon: ICONS.car, action: () => navigate('car-rental') },
     { title: 'Shopping', icon: ICONS.store, action: () => navigate('shopping') },
     { title: 'Agents', icon: ICONS.buildingStorefront, action: () => navigate('agents') },
     { title: 'Taxi', icon: ICONS.taxi, action: () => navigate('taxi') },
-    { title: 'Stays', icon: ICONS.accommodation, action: comingSoonAlert('Stays'), comingSoon: true },
     { title: 'eSIM', icon: ICONS.sim, action: () => navigate('sim') },
-    { title: 'Tours', icon: ICONS.tourism, action: comingSoonAlert('Tours'), comingSoon: true },
+    { title: 'Tours', icon: ICONS.tourism, action: () => navigate('tour') },
+    { title: 'Stays', icon: ICONS.accommodation, action: () => navigate('stays') },
   ];
 
   return (
@@ -323,7 +323,7 @@ const MerchantDashboard: React.FC<{ user: AuthState['user'] }> = ({ user }) => {
         loadProfile();
     }, []);
 
-    const merchantFeatures = [
+    const merchantFeatures: { title: string; icon: React.ReactNode; action: () => void; comingSoon?: boolean; }[] = [
         { title: 'Point of Sale', icon: ICONS.calculator, action: () => navigate('merchant-pos') },
         { title: 'Transactions', icon: ICONS.orders, action: () => navigate('orders') },
         { title: 'Full Panel', icon: ICONS.dashboard, action: () => window.location.hash = '#/merchant' },
@@ -341,6 +341,7 @@ const MerchantDashboard: React.FC<{ user: AuthState['user'] }> = ({ user }) => {
                 title={feature.title}
                 icon={feature.icon}
                 onClick={feature.action}
+                comingSoon={feature.comingSoon}
                 />
             ))}
             </div>

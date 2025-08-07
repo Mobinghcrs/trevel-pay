@@ -1,7 +1,6 @@
-
 import React from 'react';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import QRCode from 'react-qr-code';
 import { HotelBookingOrder } from '../../types';
 import Card from '../../components/Card';
@@ -33,7 +32,7 @@ const HotelBookingSuccessPage: React.FC<HotelBookingSuccessPageProps> = ({ order
         doc.text(`Booking ID: ${order.id}`, 14, 30);
         doc.text(`Guest: ${order.guests[0].fullName}`, 14, 36);
 
-        (doc as any).autoTable({
+        autoTable(doc, {
             startY: 45,
             head: [['Item', 'Details']],
             body: [
