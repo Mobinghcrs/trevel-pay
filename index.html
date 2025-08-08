@@ -2,25 +2,26 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TRAVEL PAY</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <style>
+      /* Custom scrollbar for a more modern look */
       ::-webkit-scrollbar {
         width: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #f1f5f9;
+        background: #f1f5f9; /* slate-100 */
       }
       ::-webkit-scrollbar-thumb {
-        background: #94a3b8;
+        background: #94a3b8; /* slate-400 */
         border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #64748b;
+        background: #64748b; /* slate-500 */
       }
+      /* Aurora background animation for glassmorphism cards */
       @keyframes blob {
         0% {
           transform: translate(0px, 0px) scale(1);
@@ -45,24 +46,29 @@
         animation-delay: 4s;
       }
     </style>
-    
-    <script type="importmap">
-    {
-      "imports": {
-        "react-dom/": "https://esm.sh/react-dom@^19.1.1/",
-        "react/": "https://esm.sh/react@^19.1.1/",
-        "react": "https://esm.sh/react@^19.1.1",
-        "@google/genai": "https://esm.sh/@google/genai@^1.12.0",
-        "react-dom": "https://esm.sh/react-dom@^19.1.1",
-        "jspdf": "https://esm.sh/jspdf@2.5.1",
-        "jspdf-autotable": "https://esm.sh/jspdf-autotable@3.8.2",
-        "react-qr-code": "https://esm.sh/react-qr-code@^2.0.18"
-      }
-    }
-    </script>
-
-  </head>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.1/",
+    "react/": "https://esm.sh/react@^19.1.1/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.13.0",
+    "react-dom": "https://esm.sh/react-dom@^19.1.1",
+    "jspdf": "https://esm.sh/jspdf@^3.0.1",
+    "jspdf-autotable": "https://esm.sh/jspdf-autotable@^5.0.2",
+    "react-qr-code": "https://esm.sh/react-qr-code@^2.0.18",
+    "vite": "https://esm.sh/vite@^7.1.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.0.0",
+    "path": "https://esm.sh/path@^0.12.7",
+    "url": "https://esm.sh/url@^0.11.4"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
   <body class="font-sans bg-slate-50">
     <div id="root"></div>
-  </body>
+    <script type="module" src="/src/main.tsx"></script>
+  <script type="module" src="/index.tsx"></script>
+</body>
 </html>
